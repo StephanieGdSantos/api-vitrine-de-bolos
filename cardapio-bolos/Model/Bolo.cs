@@ -7,5 +7,13 @@
         public string Descricao { get; set; }
         public virtual ICollection<Ingrediente> ListaIngredientes { get; set; }
         public double Preco { get; set; }
+
+        public Bolo(string nome, string descricao, ICollection<Ingrediente> listaDeIngredientes, double preco)
+        {
+            Nome = nome;
+            Descricao = descricao;
+            ListaIngredientes = listaDeIngredientes;
+            Preco = preco;
+        }
     }
 }

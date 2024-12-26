@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Stephanie Gomes\\Desktop\\Stephanie\\Estudos\\C#\\cardapio-bolos\\cardapio-bolos\\CardapioBolos.csproj": {}
+    "C:\\Users\\Stephanie Gomes\\Desktop\\Stephanie\\Estudos\\C#\\api-cardapio-bolos\\cardapio-bolos\\CardapioBolos.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Stephanie Gomes\\Desktop\\Stephanie\\Estudos\\C#\\cardapio-bolos\\cardapio-bolos\\CardapioBolos.csproj": {
+    "C:\\Users\\Stephanie Gomes\\Desktop\\Stephanie\\Estudos\\C#\\api-cardapio-bolos\\cardapio-bolos\\CardapioBolos.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Stephanie Gomes\\Desktop\\Stephanie\\Estudos\\C#\\cardapio-bolos\\cardapio-bolos\\CardapioBolos.csproj",
+        "projectUniqueName": "C:\\Users\\Stephanie Gomes\\Desktop\\Stephanie\\Estudos\\C#\\api-cardapio-bolos\\cardapio-bolos\\CardapioBolos.csproj",
         "projectName": "CardapioBolos",
-        "projectPath": "C:\\Users\\Stephanie Gomes\\Desktop\\Stephanie\\Estudos\\C#\\cardapio-bolos\\cardapio-bolos\\CardapioBolos.csproj",
+        "projectPath": "C:\\Users\\Stephanie Gomes\\Desktop\\Stephanie\\Estudos\\C#\\api-cardapio-bolos\\cardapio-bolos\\CardapioBolos.csproj",
         "packagesPath": "C:\\Users\\Stephanie Gomes\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Stephanie Gomes\\Desktop\\Stephanie\\Estudos\\C#\\cardapio-bolos\\cardapio-bolos\\obj\\",
+        "outputPath": "C:\\Users\\Stephanie Gomes\\Desktop\\Stephanie\\Estudos\\C#\\api-cardapio-bolos\\cardapio-bolos\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Stephanie Gomes\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -69,6 +69,18 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[9.0.0, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[7.2.0, )"
+            },
+            "Swashbuckle.AspNetCore.Swagger": {
+              "target": "Package",
+              "version": "[7.2.0, )"
+            },
+            "Swashbuckle.AspNetCore.SwaggerUI": {
+              "target": "Package",
+              "version": "[7.2.0, )"
             }
           },
           "imports": [
