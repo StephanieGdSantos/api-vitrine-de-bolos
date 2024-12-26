@@ -7,7 +7,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<CardapioBolosContext>();
 builder.Services.AddTransient<DAL<Bolo>>();
-builder.Services.AddTransient<DAL<Ingrediente>>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -23,7 +22,6 @@ builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =
 var app = builder.Build();
 
 app.AddEndpointsBolos();
-app.AddEndpointsIngredientes();
 
 app.UseSwagger();
 app.UseSwaggerUI();
