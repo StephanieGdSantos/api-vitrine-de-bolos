@@ -1,3 +1,6 @@
+﻿using CardapioBolos.Model;
+using Microsoft.EntityFrameworkCore;
+
 ﻿namespace CardapioBolos.Banco;
 
 public class DAL<T> where T : class
@@ -33,6 +36,17 @@ public class DAL<T> where T : class
 
     public void Editar(T objeto)
     {
+        var chaveDaPropriedade = typeof(T).GetProperty("Id");
+
+        if (chaveDaPropriedade == null)
+            throw new InvalidOperationException("A entidade não possui uma propriedade 'Id'.");
+
+        var chave = chaveDaPropriedade.GetValue(objeto);
+        var entidadeExiste = context.Set<T>().Find(chave);
+
+        if (entidadeExiste != null)
+            context.Entry(entidadeExiste).State = EntityState.Detached;
+
         context.Set<T>().Update(objeto);
         context.SaveChanges();
     }
