@@ -4,6 +4,7 @@ using CardapioBolos.Banco;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace cardapio_bolos.Migrations
 {
     [DbContext(typeof(CardapioBolosContext))]
-    partial class CardapioBolosContextModelSnapshot : ModelSnapshot
+    [Migration("20241227223607_AdicionaRelacionamentoNN")]
+    partial class AdicionaRelacionamentoNN
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,21 +27,6 @@ namespace cardapio_bolos.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("BoloEncomenda", b =>
-                {
-                    b.Property<int>("BoloId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("EncomendaId")
-                        .HasColumnType("int");
-
-                    b.HasKey("BoloId", "EncomendaId");
-
-                    b.HasIndex("EncomendaId");
-
-                    b.ToTable("BoloEncomenda");
-                });
 
             modelBuilder.Entity("CardapioBolos.Model.Bolo", b =>
                 {
@@ -89,10 +77,6 @@ namespace cardapio_bolos.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("BoloIds")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("DataDaEntrega")
                         .HasColumnType("datetime2");
 
@@ -118,7 +102,22 @@ namespace cardapio_bolos.Migrations
                     b.ToTable("Encomendas");
                 });
 
-            modelBuilder.Entity("BoloEncomenda", b =>
+            modelBuilder.Entity("EncomendaBolo", b =>
+                {
+                    b.Property<int>("BoloId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EncomendaId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BoloId", "EncomendaId");
+
+                    b.HasIndex("EncomendaId");
+
+                    b.ToTable("EncomendaBolo");
+                });
+
+            modelBuilder.Entity("EncomendaBolo", b =>
                 {
                     b.HasOne("CardapioBolos.Model.Bolo", null)
                         .WithMany()

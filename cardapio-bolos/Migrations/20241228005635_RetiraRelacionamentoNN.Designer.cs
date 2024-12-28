@@ -4,6 +4,7 @@ using CardapioBolos.Banco;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace cardapio_bolos.Migrations
 {
     [DbContext(typeof(CardapioBolosContext))]
-    partial class CardapioBolosContextModelSnapshot : ModelSnapshot
+    [Migration("20241228005635_RetiraRelacionamentoNN")]
+    partial class RetiraRelacionamentoNN
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,21 +27,6 @@ namespace cardapio_bolos.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("BoloEncomenda", b =>
-                {
-                    b.Property<int>("BoloId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("EncomendaId")
-                        .HasColumnType("int");
-
-                    b.HasKey("BoloId", "EncomendaId");
-
-                    b.HasIndex("EncomendaId");
-
-                    b.ToTable("BoloEncomenda");
-                });
 
             modelBuilder.Entity("CardapioBolos.Model.Bolo", b =>
                 {
@@ -116,21 +104,6 @@ namespace cardapio_bolos.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Encomendas");
-                });
-
-            modelBuilder.Entity("BoloEncomenda", b =>
-                {
-                    b.HasOne("CardapioBolos.Model.Bolo", null)
-                        .WithMany()
-                        .HasForeignKey("BoloId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CardapioBolos.Model.Encomenda", null)
-                        .WithMany()
-                        .HasForeignKey("EncomendaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
