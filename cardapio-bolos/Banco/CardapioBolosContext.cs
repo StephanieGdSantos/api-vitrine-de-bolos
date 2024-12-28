@@ -15,5 +15,19 @@ namespace CardapioBolos.Banco
                 .UseSqlServer(connectionString)
                 .UseLazyLoadingProxies();
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Encomenda>()
+                .HasMany(e => e.Bolos)
+                .WithMany(b => b.Encomendas)
+                .UsingEntity<Dictionary<string, object>>(
+                    "BoloEncomenda",
+                    j => j.HasOne<Bolo>().WithMany().HasForeignKey("BoloId"),
+                    j => j.HasOne<Encomenda>().WithMany().HasForeignKey("EncomendaId")
+                );
+        }
     }
 }
