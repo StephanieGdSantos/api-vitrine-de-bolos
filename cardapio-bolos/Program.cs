@@ -5,8 +5,16 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
+
 builder.Services.AddDbContext<CardapioBolosContext>();
 builder.Services.AddTransient<DAL<Bolo>>();
+builder.Services.AddTransient<DAL<Encomenda>>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -22,6 +30,7 @@ builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =
 var app = builder.Build();
 
 app.AddEndpointsBolos();
+app.AddEndpointsEncomendas();
 
 app.UseSwagger();
 app.UseSwaggerUI();
