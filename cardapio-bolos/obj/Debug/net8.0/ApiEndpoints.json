@@ -63,7 +63,7 @@
     "ContainingType": "CardapioBolos.EndPoints.BolosExtensions\u002B\u003C\u003Ec",
     "Method": "\u003CAddEndpointsBolos\u003Eb__0_4",
     "RelativePath": "bolos",
-    "HttpMethod": "PUT",
+    "HttpMethod": "PATCH",
     "IsController": false,
     "Order": 0,
     "Parameters": [
@@ -114,6 +114,88 @@
       {
         "Name": "id",
         "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "CardapioBolos.EndPoints.EncomendasExtensions\u002B\u003C\u003Ec",
+    "Method": "\u003CAddEndpointsEncomendas\u003Eb__0_0",
+    "RelativePath": "encomendas",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "CardapioBolos.EndPoints.EncomendasExtensions\u002B\u003C\u003Ec",
+    "Method": "\u003CAddEndpointsEncomendas\u003Eb__0_2",
+    "RelativePath": "encomendas",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "encomenda",
+        "Type": "CardapioBolos.Requests.EncomendaRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "CardapioBolos.EndPoints.EncomendasExtensions\u002B\u003C\u003Ec",
+    "Method": "\u003CAddEndpointsEncomendas\u003Eb__0_3",
+    "RelativePath": "encomendas",
+    "HttpMethod": "PATCH",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "encomenda",
+        "Type": "CardapioBolos.Requests.EncomendaRequestEdit",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "CardapioBolos.EndPoints.EncomendasExtensions\u002B\u003C\u003Ec",
+    "Method": "\u003CAddEndpointsEncomendas\u003Eb__0_1",
+    "RelativePath": "encomendas/{id}",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
         "IsRequired": true
       }
     ],
