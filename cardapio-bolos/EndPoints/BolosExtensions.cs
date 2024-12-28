@@ -43,7 +43,7 @@ public static class BolosExtensions
             return Results.Ok();
         });
 
-        app.MapPut("/bolos", ([FromServices] DAL<Bolo> dal, [FromBody] BoloRequestEdit bolo) =>
+        app.MapPatch("/bolos", ([FromServices] DAL<Bolo> dal, [FromBody] BoloRequestEdit bolo) =>
         {
             var boloAAtualizar = dal.Buscar(bolos => bolos.Id.Equals(bolo.Id));
             if (boloAAtualizar == null)
@@ -51,7 +51,10 @@ public static class BolosExtensions
                 return Results.NotFound();
             }
 
-            var boloAtualizado = new Bolo(bolo.Nome, bolo.Imagem, bolo.Descricao, bolo.ListaDeIngredientes, bolo.Preco);
+            var boloAtualizado = new Bolo(bolo.Nome, bolo.Imagem, bolo.Descricao, bolo.ListaDeIngredientes, bolo.Preco)
+            {
+                Id = bolo.Id
+            };
             dal.Editar(boloAtualizado);
             return Results.Ok();
         });
