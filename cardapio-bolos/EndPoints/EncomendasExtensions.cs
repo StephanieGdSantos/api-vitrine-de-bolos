@@ -1,6 +1,7 @@
 ﻿using CardapioBolos.Banco;
 using CardapioBolos.Model;
 using CardapioBolos.Requests;
+using CardapioBolos.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CardapioBolos.EndPoints
@@ -25,24 +26,9 @@ namespace CardapioBolos.EndPoints
                 return Results.Ok(encomenda);
             });
 
-            app.MapPost("/encomendas", ([FromServices] DAL<Encomenda> dalEncomenda, [FromServices] DAL<Bolo> dalBolos, [FromBody] EncomendaRequest encomenda) =>
+            app.MapPost("/encomendas", ([FromServices] DAL<Encomenda> dalEncomenda, [FromServices] DAL<Bolo> bolosDAL, [FromServices] CardapioBolosContext context, [FromBody] EncomendaRequest encomenda) =>
             {
-                var bolosId = encomenda.Bolos.Select(b => b.Id).ToList();
-                var bolosExistentes = dalBolos.Listar().Where(b => bolosId.Contains(b.Id)).ToList();
-                var todosOsBolosExistem = bolosExistentes.Count() == bolosId.Count;
-
-                if (!todosOsBolosExistem)
-                {
-                    return Results.Problem("Houve uma falha com os bolos escolhidos.");
-                }
-
-                bolosExistentes.ForEach(bolo => bolo.Peso = encomenda.Bolos.First(b => b.Id.Equals(bolo.Id)).Peso);
-                bolosExistentes.ForEach(bolo => bolo.Formato = encomenda.Bolos.First(b => b.Id.Equals(bolo.Id)).Formato);
-                bolosExistentes.ForEach(bolo => bolo.Observacao = encomenda.Bolos.First(b => b.Id.Equals(bolo.Id)).Observacao);
-
-                var valorFinal = bolosExistentes.Sum(bolo => bolo.Preco * bolo.Peso);
-
-                var novaEncomenda = new Encomenda(encomenda.DataDoPedido, encomenda.NomeCliente, encomenda.TelefoneCliente, bolosExistentes, valorFinal, encomenda.DataDaEntrega);
+                var novaEncomenda = new EncomendaServices(context).ObterEncomenda(encomenda);
 
                 dalEncomenda.Adicionar(novaEncomenda);
                 return Results.Ok();
