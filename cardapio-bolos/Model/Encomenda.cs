@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace CardapioBolos.Model
 {
@@ -12,9 +13,14 @@ namespace CardapioBolos.Model
         public bool Finalizado { get; set; }
         public DateTime DataDaEntrega { get; set; }
         public virtual List<Bolo> Bolos { get; set; }
+        public string Cidade { get; set; }
+        public string Bairro { get; set; }
+        public string Logradouro { get; set; }
+        public string Numero { get; set; }
+        public string? Complemento { get; set; }
 
         public Encomenda() { }
-        public Encomenda(DateTime dataDoPedido, string nomeCliente, string telefoneCliente, List<Bolo> bolos, double valorFinal, DateTime dataDaEntrega)
+        public Encomenda(DateTime dataDoPedido, string nomeCliente, string telefoneCliente, List<Bolo> bolos, double valorFinal, DateTime dataDaEntrega, string cidade, string bairro, string logradouro, string numero, string? complemento = null)
         {
             DataDoPedido = dataDoPedido;
             NomeCliente = nomeCliente;
@@ -22,6 +28,11 @@ namespace CardapioBolos.Model
             Bolos = bolos;
             ValorFinal = valorFinal;
             DataDaEntrega = dataDaEntrega;
+            Cidade = cidade;
+            Bairro = bairro;
+            Logradouro = logradouro;
+            Numero = numero;
+            Complemento = complemento;
         }
     }
 }
