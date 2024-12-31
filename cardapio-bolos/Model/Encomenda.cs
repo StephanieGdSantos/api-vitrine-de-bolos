@@ -5,6 +5,7 @@ namespace CardapioBolos.Model
 {
     public class Encomenda
     {
+        [JsonIgnore]
         public int Id { get; set; }
         public DateTime DataDoPedido { get; set; }
         public string NomeCliente { get; set; }
