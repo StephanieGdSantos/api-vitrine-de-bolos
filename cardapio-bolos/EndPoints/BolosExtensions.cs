@@ -27,15 +27,19 @@ public static class BolosExtensions
             return Results.Ok(bolo);
         });
 
-        app.MapGet("/bolos/{nome}", ([FromServices] DAL<Bolo> dal, string nome) =>
+        app.MapGet("/bolos/{nome}", ([FromServices] DAL<Bolo> dal, [FromServices] CardapioBolosContext context, string nome) =>
         {
-            var bolo = dal.Buscar(bolo => bolo.Nome.Equals(nome));
-            if (bolo == null)
+            var nomeProcurado = new BoloServices(context).FormatarNomeParaBusca(nome);
+            var bolosDisponiveis = dal.Listar().Select(bolo => bolo.Nome).ToArray();
+            var bolosEncontrados = new Buscador().BuscarNomesSemelhantes(bolosDisponiveis, nomeProcurado);
+
+            var bolos = dal.Listar().Where(bolo => bolosEncontrados.Contains(bolo.Nome));
+            if (!bolos.Any())
             {
                 return Results.NotFound();
             }
 
-            return Results.Ok(bolo);
+            return Results.Ok(bolos);
         });
 
         app.MapPost("/bolos", ([FromServices] DAL<Bolo> dal, [FromServices] CardapioBolosContext context, ClaimsPrincipal usuario, [FromBody] BoloRequest bolo) =>
