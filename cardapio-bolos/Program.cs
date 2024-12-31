@@ -15,6 +15,8 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 builder.Services.AddDbContext<CardapioBolosContext>();
 builder.Services.AddTransient<DAL<Bolo>>();
 builder.Services.AddTransient<DAL<Encomenda>>();
+builder.Services.AddTransient<DAL<Administrador>>();
+builder.Services.AddScoped<AdministradorServices>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

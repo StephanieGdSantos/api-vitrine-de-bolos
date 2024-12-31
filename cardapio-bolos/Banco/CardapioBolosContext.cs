@@ -7,6 +7,7 @@ namespace CardapioBolos.Banco
     {
         public DbSet<Bolo> Bolos { get; set; }
         public DbSet<Encomenda> Encomendas { get; set; }
+        public DbSet<Administrador> Administrador { get; set; }
 
         private string connectionString = "Data Source=DESKTOP-VB2NFI2;Initial Catalog=CardapioDeBolos;Integrated Security=True;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -28,6 +29,11 @@ namespace CardapioBolos.Banco
                     j => j.HasOne<Bolo>().WithMany().HasForeignKey("BoloId"),
                     j => j.HasOne<Encomenda>().WithMany().HasForeignKey("EncomendaId")
                 );
+
+            modelBuilder.Entity<Bolo>()
+                .HasOne(b => b.Administrador)
+                .WithMany(a => a.Bolos)
+                .HasForeignKey(b => b.AdministradorId);
         }
     }
 }

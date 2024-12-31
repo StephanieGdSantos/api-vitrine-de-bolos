@@ -4,6 +4,7 @@ using CardapioBolos.Banco;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace cardapio_bolos.Migrations
 {
     [DbContext(typeof(CardapioBolosContext))]
-    partial class CardapioBolosContextModelSnapshot : ModelSnapshot
+    [Migration("20241230001232_AdicionaAdministrador")]
+    partial class AdicionaAdministrador
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,7 +40,7 @@ namespace cardapio_bolos.Migrations
 
                     b.HasIndex("EncomendaId");
 
-                    b.ToTable("BoloEncomenda", (string)null);
+                    b.ToTable("BoloEncomenda");
                 });
 
             modelBuilder.Entity("CardapioBolos.Model.Administrador", b =>
@@ -66,7 +69,7 @@ namespace cardapio_bolos.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Administrador", (string)null);
+                    b.ToTable("Administrador");
                 });
 
             modelBuilder.Entity("CardapioBolos.Model.Bolo", b =>
@@ -121,7 +124,7 @@ namespace cardapio_bolos.Migrations
 
                     b.HasIndex("AdministradorId");
 
-                    b.ToTable("Bolos", (string)null);
+                    b.ToTable("Bolos");
                 });
 
             modelBuilder.Entity("CardapioBolos.Model.Encomenda", b =>
@@ -173,7 +176,7 @@ namespace cardapio_bolos.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Encomendas", (string)null);
+                    b.ToTable("Encomendas");
                 });
 
             modelBuilder.Entity("BoloEncomenda", b =>
