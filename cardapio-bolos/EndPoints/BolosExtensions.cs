@@ -13,7 +13,7 @@ public static class BolosExtensions
     {
         app.MapGet("/bolos", ([FromServices] DAL<Bolo> dal) =>
         {
-            return Results.Ok(dal.Listar());
+            return Results.Ok(dal.Listar().OrderBy(bolo => bolo.Nome));
         });
 
         app.MapGet("/bolos/id={id}", ([FromServices] DAL<Bolo> dal, string id) =>
@@ -42,7 +42,7 @@ public static class BolosExtensions
         {
             var usuarioEhAdmin = new AdministradorServices(context).ValidaSeEhAdministrador(usuario);
             if (!usuarioEhAdmin)
-        {
+            {
                 return Results.Unauthorized();
             }
 
@@ -55,7 +55,7 @@ public static class BolosExtensions
         {
             var usuarioEhAdmin = new AdministradorServices(context).ValidaSeEhAdministrador(usuario);
             if (!usuarioEhAdmin)
-        {
+            {
                 return Results.Unauthorized();
             }
 
@@ -77,7 +77,7 @@ public static class BolosExtensions
         {
             var usuarioEhAdmin = new AdministradorServices(context).ValidaSeEhAdministrador(usuario);
             if (!usuarioEhAdmin)
-        {
+            {
                 return Results.Unauthorized();
             }
 
