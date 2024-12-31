@@ -12,7 +12,7 @@ namespace CardapioBolos.EndPoints
         {
             app.MapGet("/encomendas", ([FromServices] DAL<Encomenda> dal) =>
             {
-                return Results.Ok(dal.Listar());
+                return Results.Ok(dal.Listar().OrderBy(encomenda => encomenda.DataDaEntrega));
             });
 
             app.MapGet("/encomendas/{id}", ([FromServices] DAL<Encomenda> dal, int id) =>
@@ -52,6 +52,16 @@ namespace CardapioBolos.EndPoints
                 };
 
                 dal.Editar(novaEncomenda);
+                return Results.Ok();
+            });
+
+            app.MapDelete("/encomendas/{id}", ([FromServices] DAL<Encomenda> dal, int id) =>
+            {
+                var encomendaExistente = dal.Buscar(encomenda => encomenda.Id.Equals(id));
+                if (encomendaExistente == null)
+                    return Results.NotFound();
+
+                dal.Excluir(encomendaExistente);
                 return Results.Ok();
             });
         }

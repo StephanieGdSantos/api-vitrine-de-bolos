@@ -2,6 +2,8 @@ using CardapioBolos.Banco;
 using CardapioBolos.Model;
 using CardapioBolos.EndPoints;
 using System.Text.Json.Serialization;
+using CardapioBolos.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +18,9 @@ builder.Services.AddDbContext<CardapioBolosContext>();
 builder.Services.AddTransient<DAL<Bolo>>();
 builder.Services.AddTransient<DAL<Encomenda>>();
 builder.Services.AddTransient<DAL<Administrador>>();
+builder.Services.AddScoped<EncomendaServices>();
 builder.Services.AddScoped<AdministradorServices>();
+builder.Services.AddScoped<BoloServices>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -29,10 +33,27 @@ builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =
     options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
     options.SerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
 });
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/login";
+        options.AccessDeniedPath = "/access-denied";
+    });
+
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.AddEndpointsBolos();
 app.AddEndpointsEncomendas();
+app.AddEndPointsAdministrador();
 
 app.UseSwagger();
 app.UseSwaggerUI();
