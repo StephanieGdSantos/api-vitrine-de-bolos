@@ -43,7 +43,7 @@ namespace cardapio_bolos.Migrations
                     b.ToTable("BoloEncomenda");
                 });
 
-            modelBuilder.Entity("CadapioBolos.Model.Endereco", b =>
+            modelBuilder.Entity("CardapioBolos.Model.Endereco", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -176,7 +176,7 @@ namespace cardapio_bolos.Migrations
 
             modelBuilder.Entity("CardapioBolos.Model.Encomenda", b =>
                 {
-                    b.HasOne("CadapioBolos.Model.Endereco", "Endereco")
+                    b.HasOne("CardapioBolos.Model.Endereco", "Endereco")
                         .WithMany()
                         .HasForeignKey("EnderecoId");
 
