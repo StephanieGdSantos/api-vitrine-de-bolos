@@ -3,6 +3,8 @@ using CardapioBolos.Model;
 using CardapioBolos.Requests;
 using CardapioBolos.Services;
 using Microsoft.AspNetCore.Mvc;
+using subsequencia_mais_longa.Services;
+using System.Linq;
 using System.Security.Claims;
 
 namespace CardapioBolos.EndPoints;
@@ -30,10 +32,10 @@ public static class BolosExtensions
         app.MapGet("/bolos/{nome}", ([FromServices] DAL<Bolo> dal, [FromServices] CardapioBolosContext context, string nome) =>
         {
             var nomeProcurado = new BoloServices(context).FormatarNomeParaBusca(nome);
-            var bolosDisponiveis = dal.Listar().Select(bolo => bolo.Nome).ToArray();
-            var bolosEncontrados = new Buscador().BuscarNomesSemelhantes(bolosDisponiveis, nomeProcurado);
+            var bolosExistentes = dal.Listar().Select(bolo => bolo.Nome).ToArray();
+            var bolosEncontrados = new Buscador().BuscarNomesSemelhantes(bolosExistentes, nomeProcurado);
 
-            var bolos = dal.Listar().Where(bolo => bolosEncontrados.Contains(bolo.Nome));
+            var bolos = dal.Listar().Where(bolo => bolosEncontrados.Contains(bolo.Nome.ToLower()));
             if (!bolos.Any())
             {
                 return Results.NotFound();

@@ -75,5 +75,14 @@ namespace CardapioBolos.Services
 
             return bolosAInserir;
         }
+
+        public string FormatarNomeParaBusca(string nome)
+        {
+            var nomeProcurado = nome.Replace(" ", "+");
+            nomeProcurado.Split('+');
+            nomeProcurado = string.Join(" ", nomeProcurado).ToLower();
+
+            return nomeProcurado.ToLower();
+        }
     }
 }
