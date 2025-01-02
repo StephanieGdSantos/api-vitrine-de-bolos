@@ -1,8 +1,10 @@
 ﻿using CardapioBolos.Banco;
+using CardapioBolos.DTO;
 using CardapioBolos.Model;
 using CardapioBolos.Requests;
 using CardapioBolos.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CardapioBolos.EndPoints
 {
@@ -10,13 +12,25 @@ namespace CardapioBolos.EndPoints
     {
         public static void AddEndpointsEncomendas(this WebApplication app)
         {
-            app.MapGet("/encomendas", ([FromServices] DAL<Encomenda> dal) =>
+            app.MapGet("/encomendas", ([FromServices] DAL<Encomenda> dal, ClaimsPrincipal usuario, [FromServices] CardapioBolosContext context) =>
             {
+                var usuarioEhAdmin = new AdministradorServices(context).ValidaSeEhAdministrador(usuario);
+                if (!usuarioEhAdmin)
+                {
+                    return Results.Unauthorized();
+                }
+
                 return Results.Ok(dal.Listar().OrderBy(encomenda => encomenda.DataDaEntrega));
             });
 
-            app.MapGet("/encomendas/{id}", ([FromServices] DAL<Encomenda> dal, int id) =>
+            app.MapGet("/encomendas/{id}", ([FromServices] DAL<EncomendaDTO> dal, [FromServices] CardapioBolosContext context, ClaimsPrincipal usuario, int id) =>
             {
+                var usuarioEhAdmin = new AdministradorServices(context).ValidaSeEhAdministrador(usuario);
+                if (!usuarioEhAdmin)
+                {
+                    return Results.Unauthorized();
+                }
+
                 var encomenda = dal.Buscar(encomenda => encomenda.Id.Equals(id));
                 if (encomenda == null)
                 {
@@ -29,13 +43,23 @@ namespace CardapioBolos.EndPoints
             app.MapPost("/encomendas", ([FromServices] DAL<Encomenda> dalEncomenda, [FromServices] DAL<Bolo> bolosDAL, [FromServices] CardapioBolosContext context, [FromBody] EncomendaRequest encomenda) =>
             {
                 var novaEncomenda = new EncomendaServices(context).ObterEncomenda(encomenda);
+                if (novaEncomenda == null)
+                {
+                    return Results.Problem("Erro ao criar encomenda.");
+                }
 
                 dalEncomenda.Adicionar(novaEncomenda);
                 return Results.Ok();
             });
 
-            app.MapPatch("/encomendas", ([FromServices] DAL<Encomenda> dal, [FromBody] EncomendaRequestEdit encomenda) =>
+            app.MapPatch("/encomendas", ([FromServices] DAL<Encomenda> dal, [FromServices] CardapioBolosContext context, ClaimsPrincipal usuario, [FromBody] EncomendaRequestEdit encomenda) =>
             {
+                var usuarioEhAdmin = new AdministradorServices(context).ValidaSeEhAdministrador(usuario);
+                if (!usuarioEhAdmin)
+                {
+                    return Results.Unauthorized();
+                }
+
                 var encomendaExistente = dal.Buscar(encomenda => encomenda.Id.Equals(encomenda.Id));
                 if (encomendaExistente == null)
                 {
@@ -55,8 +79,13 @@ namespace CardapioBolos.EndPoints
                 return Results.Ok();
             });
 
-            app.MapDelete("/encomendas/{id}", ([FromServices] DAL<Encomenda> dal, int id) =>
+            app.MapDelete("/encomendas/{id}", ([FromServices] DAL<Encomenda> dal, [FromServices] CardapioBolosContext context, ClaimsPrincipal usuario, int id) =>
             {
+                var usuarioEhAdmin = new AdministradorServices(context).ValidaSeEhAdministrador(usuario);
+                if (!usuarioEhAdmin)
+                {
+                    return Results.Unauthorized();
+                }
                 var encomendaExistente = dal.Buscar(encomenda => encomenda.Id.Equals(id));
                 if (encomendaExistente == null)
                     return Results.NotFound();
