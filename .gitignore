@@ -1,0 +1,10 @@
+# Ignore arquivos de configuração
+appsettings.json
+
+# Ignore arquivos de usuário do Visual Studio
+.vscode/
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
