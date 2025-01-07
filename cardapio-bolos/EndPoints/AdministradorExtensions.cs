@@ -1,5 +1,6 @@
 ﻿using CardapioBolos.Banco;
 using CardapioBolos.Model;
+using CardapioBolos.Requests;
 using CardapioBolos.Services;
 using CardapioBolos.Utils;
 using Microsoft.AspNetCore.Authorization;
@@ -25,7 +26,7 @@ namespace CardapioBolos.EndPoints
                 return Results.Ok();
             });
 
-            app.MapPost("/admin/login", ([FromServices] AdministradorServices administradorServices, [FromBody] Administrador administrador) =>
+            app.MapPost("/admin/login", ([FromServices] AdministradorServices administradorServices, [FromBody] AdministradorRequest administrador) =>
             {
                 var senhaValida = administradorServices.Autenticar(administrador.Email, administrador.Senha);
                 if (!senhaValida)
@@ -33,7 +34,6 @@ namespace CardapioBolos.EndPoints
 
                 var claims = new List<Claim>
                 {
-                        new(ClaimTypes.Name, administrador.Nome),
                         new(ClaimTypes.Email, administrador.Email),
                         new(ClaimTypes.Role, "admin")
                 };
@@ -43,21 +43,26 @@ namespace CardapioBolos.EndPoints
                 return Results.SignIn(usuario);
             });
 
-            app.MapGet("/sessao", [Authorize] (ClaimsPrincipal usuario) =>
+            app.MapPatch("/admin/{id}", ([FromServices] DAL<Administrador> dal, [FromServices] CardapioBolosContext context, [FromBody] Administrador administrador) =>
             {
-                if (usuario == null)
-                    return Results.Problem("Usuário não autenticado.");
+                var admin = dal.BuscarPorId(administrador.Id);
+                if (admin == null)
+                    return Results.NotFound();
 
-                var nome = usuario.FindFirst(ClaimTypes.Name)?.Value;
-                var email = usuario.FindFirst(ClaimTypes.Email)?.Value;
-                var role = usuario.FindFirst(ClaimTypes.Role)?.Value;
+                var novoAdmin = new Administrador(administrador.Nome, administrador.Telefone, administrador.Email, administrador.Senha);
 
-                return Results.Ok(new
-                {
-                    Nome = nome,
-                    Email = email,
-                    Role = role
-                });
+                dal.Editar(novoAdmin);
+                return Results.Ok();
+            });
+
+            app.MapDelete("admin/{id}", ([FromServices] DAL<Administrador> dal, [FromServices] CardapioBolosContext context, int id) =>
+            {
+                var admin = dal.BuscarPorId(id);
+                if (admin == null)
+                    return Results.NotFound();
+
+                dal.Excluir(admin);
+                return Results.Ok();
             });
         }
     }
