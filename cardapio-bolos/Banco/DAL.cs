@@ -18,9 +18,14 @@ public class DAL<T> where T : class
         context.SaveChanges();
     }
 
-    public T Buscar(Func<T, bool> condicao)
+    public T? Buscar(Func<T, bool> condicao)
     {
         return context.Set<T>().FirstOrDefault(condicao);
+    }
+
+    public T? BuscarPorId(int id)
+    {
+        return context.Set<T>().Find(id);
     }
 
     public IEnumerable<T> Listar()

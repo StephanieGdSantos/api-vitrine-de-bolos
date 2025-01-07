@@ -18,15 +18,15 @@ public static class BolosExtensions
             return Results.Ok(dal.Listar().OrderBy(bolo => bolo.Nome));
         });
 
-        app.MapGet("/bolos/id={id}", ([FromServices] DAL<Bolo> dal, string id) =>
+        app.MapGet("/bolos/id={id}", ([FromServices] DAL<Bolo> dal, int id) =>
         {
-            var bolo = dal.Buscar(bolo => bolo.Id.Equals(id));
-            if (bolo == null)
+            var boloSelecionado = dal.BuscarPorId(id);
+            if (boloSelecionado == null)
             {
                 return Results.NotFound();
             }
 
-            return Results.Ok(bolo);
+            return Results.Ok(boloSelecionado);
         });
 
         app.MapGet("/bolos/{nome}", ([FromServices] DAL<Bolo> dal, [FromServices] CardapioBolosContext context, string nome) =>
@@ -65,7 +65,7 @@ public static class BolosExtensions
                 return Results.Unauthorized();
             }
 
-            var boloAAtualizar = dal.Buscar(bolos => bolos.Id.Equals(bolo.Id));
+            var boloAAtualizar = dal.BuscarPorId(bolo.Id);
             if (boloAAtualizar == null)
             {
                 return Results.NotFound();
@@ -79,7 +79,7 @@ public static class BolosExtensions
             return Results.Ok();
         });
 
-        app.MapDelete("/bolo/{id}", ([FromServices] DAL<Bolo> dal, [FromServices] CardapioBolosContext context, ClaimsPrincipal usuario, int id) =>
+        app.MapDelete("/bolos/{id}", ([FromServices] DAL<Bolo> dal, [FromServices] CardapioBolosContext context, ClaimsPrincipal usuario, int id) =>
         {
             var usuarioEhAdmin = new AdministradorServices(context).ValidaSeEhAdministrador(usuario);
             if (!usuarioEhAdmin)
@@ -87,7 +87,7 @@ public static class BolosExtensions
                 return Results.Unauthorized();
             }
 
-            var boloAExcluir = dal.Buscar(bolos => bolos.Id.Equals(id));
+            var boloAExcluir = dal.BuscarPorId(id);
             if (boloAExcluir == null)
             {
                 return Results.NotFound();

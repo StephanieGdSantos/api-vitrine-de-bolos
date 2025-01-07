@@ -31,7 +31,7 @@ namespace CardapioBolos.EndPoints
                     return Results.Unauthorized();
                 }
 
-                var encomenda = dal.Buscar(encomenda => encomenda.Id.Equals(id));
+                var encomenda = dal.BuscarPorId(id);
                 if (encomenda == null)
                 {
                     return Results.NotFound();
@@ -60,7 +60,7 @@ namespace CardapioBolos.EndPoints
                     return Results.Unauthorized();
                 }
 
-                var encomendaExistente = dal.Buscar(encomenda => encomenda.Id.Equals(encomenda.Id));
+                var encomendaExistente = dal.BuscarPorId(encomenda.Id);
                 if (encomendaExistente == null)
                 {
                     return Results.NotFound();
@@ -86,7 +86,7 @@ namespace CardapioBolos.EndPoints
                 {
                     return Results.Unauthorized();
                 }
-                var encomendaExistente = dal.Buscar(encomenda => encomenda.Id.Equals(id));
+                var encomendaExistente = dal.BuscarPorId(id);
                 if (encomendaExistente == null)
                     return Results.NotFound();
 
