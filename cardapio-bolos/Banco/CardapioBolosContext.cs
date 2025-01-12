@@ -9,7 +9,7 @@ namespace CardapioBolos.Banco
         public DbSet<Encomenda> Encomendas { get; set; }
         public DbSet<Administrador> Administrador { get; set; }
 
-        private string connectionString = "Data Source=DESKTOP-VB2NFI2;Initial Catalog=CardapioDeBolos;Integrated Security=True;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+        private string connectionString = "Server=host.docker.internal,1433;Database=CardapioDeBolos;Trusted_Connection=false;Encrypt=false;User Id=sa;Password=BDVitrine#10;";
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder
