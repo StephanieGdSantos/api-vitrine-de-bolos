@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 public class ApiKeyMiddleware
 {
     private readonly RequestDelegate _next;
-    private const string ApiKeyHeaderName = "X-Api-Key";
+    private const string ApiKeyHeaderName = "x-api-key";
 
     public ApiKeyMiddleware(RequestDelegate next)
     {
@@ -14,6 +14,12 @@ public class ApiKeyMiddleware
 
     public async Task InvokeAsync(HttpContext context, IConfiguration configuration)
     {
+        if (context.Request.Path.StartsWithSegments("/swagger"))
+        {
+            await _next(context);
+            return;
+        }
+
         if (!context.Request.Headers.TryGetValue(ApiKeyHeaderName, out var extractedApiKey))
         {
             context.Response.StatusCode = 401;
