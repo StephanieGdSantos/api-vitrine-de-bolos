@@ -2,6 +2,7 @@ appsettings.json
 
 /bin
 /obj
+/Banco/CardapioBolosContext.cs
 
 .vscode/
 .vs/
