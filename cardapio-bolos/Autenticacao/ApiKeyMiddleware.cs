@@ -29,7 +29,7 @@ public class ApiKeyMiddleware
 
         var apiKey = configuration.GetValue<string>("ApiKey");
 
-        if (!apiKey.Equals(extractedApiKey))
+        if (apiKey != null && !apiKey.Equals(extractedApiKey))
         {
             context.Response.StatusCode = 401;
             await context.Response.WriteAsync("API Key inválida.");
