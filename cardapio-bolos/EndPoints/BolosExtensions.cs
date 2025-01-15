@@ -27,9 +27,7 @@ public static class BolosExtensions
         {
             var boloSelecionado = dal.BuscarPorId(id);
             if (boloSelecionado == null)
-            {
                 return Results.NotFound();
-            }
 
             return Results.Ok(boloSelecionado);
         });
@@ -42,9 +40,7 @@ public static class BolosExtensions
 
             var bolos = dal.Listar().Where(bolo => bolosEncontrados.Contains(bolo.Nome.ToLower()));
             if (!bolos.Any())
-            {
                 return Results.NotFound();
-            }
 
             return Results.Ok(bolos);
         });
@@ -53,7 +49,6 @@ public static class BolosExtensions
         {
             var usuarioEhAdmin = new AdministradorServices(context).ValidaSeEhAdministrador(usuario);
             if (!usuarioEhAdmin)
-            {
                 return Results.Unauthorized();
             }
 
@@ -66,15 +61,11 @@ public static class BolosExtensions
         {
             var usuarioEhAdmin = new AdministradorServices(context).ValidaSeEhAdministrador(usuario);
             if (!usuarioEhAdmin)
-            {
                 return Results.Unauthorized();
-            }
 
             var boloAAtualizar = dal.BuscarPorId(bolo.Id);
             if (boloAAtualizar == null)
-            {
                 return Results.NotFound();
-            }
 
             var boloAtualizado = new Bolo(bolo.Nome, bolo.Imagem, bolo.Descricao, bolo.ListaDeIngredientes, bolo.Preco)
             {
@@ -88,15 +79,11 @@ public static class BolosExtensions
         {
             var usuarioEhAdmin = new AdministradorServices(context).ValidaSeEhAdministrador(usuario);
             if (!usuarioEhAdmin)
-            {
                 return Results.Unauthorized();
-            }
 
             var boloAExcluir = dal.BuscarPorId(id);
             if (boloAExcluir == null)
-            {
                 return Results.NotFound();
-            }
 
             dal.Excluir(boloAExcluir);
             return Results.NoContent();

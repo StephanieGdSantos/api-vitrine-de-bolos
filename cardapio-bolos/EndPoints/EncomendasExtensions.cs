@@ -16,9 +16,7 @@ namespace CardapioBolos.EndPoints
             {
                 var usuarioEhAdmin = new AdministradorServices(context).ValidaSeEhAdministrador(usuario);
                 if (!usuarioEhAdmin)
-                {
                     return Results.Unauthorized();
-                }
 
                 var encomendas = dal.Listar();
                 if (!encomendas.Any())
@@ -31,15 +29,11 @@ namespace CardapioBolos.EndPoints
             {
                 var usuarioEhAdmin = new AdministradorServices(context).ValidaSeEhAdministrador(usuario);
                 if (!usuarioEhAdmin)
-                {
                     return Results.Unauthorized();
-                }
 
                 var encomenda = dal.BuscarPorId(id);
                 if (encomenda == null)
-                {
                     return Results.NotFound();
-                }
 
                 return Results.Ok(encomenda);
             });
@@ -48,9 +42,7 @@ namespace CardapioBolos.EndPoints
             {
                 var novaEncomenda = new EncomendaServices(context).ObterEncomenda(encomenda);
                 if (novaEncomenda == null)
-                {
                     return Results.Problem("Erro ao criar encomenda.");
-                }
 
                 dalEncomenda.Adicionar(novaEncomenda);
                 return Results.Ok();
@@ -60,15 +52,11 @@ namespace CardapioBolos.EndPoints
             {
                 var usuarioEhAdmin = new AdministradorServices(context).ValidaSeEhAdministrador(usuario);
                 if (!usuarioEhAdmin)
-                {
                     return Results.Unauthorized();
-                }
 
                 var encomendaExistente = dal.BuscarPorId(encomenda.Id);
                 if (encomendaExistente == null)
-                {
                     return Results.NotFound();
-                }
 
                 var novaEncomenda = new Encomenda()
                 {
@@ -87,9 +75,8 @@ namespace CardapioBolos.EndPoints
             {
                 var usuarioEhAdmin = new AdministradorServices(context).ValidaSeEhAdministrador(usuario);
                 if (!usuarioEhAdmin)
-                {
                     return Results.Unauthorized();
-                }
+
                 var encomendaExistente = dal.BuscarPorId(id);
                 if (encomendaExistente == null)
                     return Results.NotFound();
