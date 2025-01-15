@@ -1,4 +1,5 @@
 ﻿using CardapioBolos.Banco;
+using CardapioBolos.DTO;
 using CardapioBolos.Model;
 using CardapioBolos.Requests;
 using CardapioBolos.Services;
@@ -45,15 +46,20 @@ public static class BolosExtensions
             return Results.Ok(bolos);
         });
 
-        app.MapPost("/bolos", ([FromServices] DAL<Bolo> dal, [FromServices] CardapioBolosContext context, ClaimsPrincipal usuario, [FromBody] BoloRequest bolo) =>
+        app.MapPost("/bolos", ([FromServices] DAL<Bolo> boloDal, [FromServices] DAL<Ingrediente> ingredienteDal, [FromServices] CardapioBolosContext context, ClaimsPrincipal usuario, [FromBody] BoloRequest bolo) =>
         {
             var usuarioEhAdmin = new AdministradorServices(context).ValidaSeEhAdministrador(usuario);
             if (!usuarioEhAdmin)
                 return Results.Unauthorized();
-            }
 
-            var novoBolo = new Bolo(bolo.Nome, bolo.Imagem, bolo.Descricao, bolo.ListaDeIngredientes, bolo.Preco);
-            dal.Adicionar(novoBolo);
+            var nomesIngredientesInseridos = bolo.Ingredientes.Select(ingrediente => ingrediente.Nome);
+
+            var ingredientesDoBolo = ingredienteDal.Listar()
+                .Where(ingrediente => nomesIngredientesInseridos.Contains(ingrediente.Nome))
+                .ToList();
+
+            var novoBolo = new Bolo(bolo.Nome, bolo.Imagem, bolo.Descricao, ingredientesDoBolo, bolo.Preco);
+            boloDal.Adicionar(novoBolo);
             return Results.Ok();
         });
 
@@ -67,7 +73,14 @@ public static class BolosExtensions
             if (boloAAtualizar == null)
                 return Results.NotFound();
 
-            var boloAtualizado = new Bolo(bolo.Nome, bolo.Imagem, bolo.Descricao, bolo.ListaDeIngredientes, bolo.Preco)
+            var nomeIngredientesInseridos = bolo.Ingredientes
+            .Select(ingrediente => ingrediente.Nome);
+
+            var ingredientesDoBolo = dal.Listar()
+                .Where(ingrediente => nomeIngredientesInseridos.Contains(ingrediente.Nome))
+                .ToList();
+
+            var boloAtualizado = new Bolo(bolo.Nome, bolo.Imagem, bolo.Descricao, bolo.Ingredientes, bolo.Preco)
             {
                 Id = bolo.Id
             };

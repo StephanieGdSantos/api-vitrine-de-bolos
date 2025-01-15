@@ -57,7 +57,7 @@ namespace CardapioBolos.Services
                 bolo.Nome = "Bolo não encontrado";
                 bolo.Imagem = null;
                 bolo.Descricao = null;
-                bolo.ListaIngredientes = null;
+                bolo.Ingredientes = null;
                 bolo.Preco = 0;
                 bolo.Peso = 0;
                 bolo.Formato = null;

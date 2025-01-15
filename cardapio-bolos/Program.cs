@@ -19,6 +19,7 @@ builder.Services.AddDbContext<CardapioBolosContext>();
 builder.Services.AddTransient<DAL<Bolo>>();
 builder.Services.AddTransient<DAL<Encomenda>>();
 builder.Services.AddTransient<DAL<Administrador>>();
+builder.Services.AddTransient<DAL<Ingrediente>>();
 builder.Services.AddScoped<EncomendaServices>();
 builder.Services.AddScoped<AdministradorServices>();
 builder.Services.AddScoped<BoloServices>();
@@ -60,6 +61,7 @@ app.UseAuthorization();
 app.AddEndpointsBolos();
 app.AddEndpointsEncomendas();
 app.AddEndPointsAdministrador();
+app.AddEndpointsIngredientes();
 
 app.UseSwagger();
 app.UseSwaggerUI();

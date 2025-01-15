@@ -8,7 +8,6 @@ namespace CardapioBolos.Model
         public string Nome { get; set; }
         public string Imagem { get; set; }
         public string Descricao { get; set; }
-        public string ListaIngredientes { get; set; }
         public double Preco { get; set; }
         public bool? Topper { get; set; }
         public bool? PapelDeArroz { get; set; }
@@ -22,14 +21,15 @@ namespace CardapioBolos.Model
         public virtual Administrador Administrador { get; set; }
         [JsonIgnore]
         public virtual List<Encomenda> Encomendas { get; set; }
+        public virtual List<Ingrediente> Ingredientes { get; set; }
 
         public Bolo() { }
-        public Bolo(string nome, string imagem, string descricao, string listaDeIngredientes, double preco, double? peso = 1)
+        public Bolo(string nome, string imagem, string descricao, List<Ingrediente> ingredientes, double preco, double? peso = 1)
         {
             Nome = nome;
             Imagem = imagem;
             Descricao = descricao;
-            ListaIngredientes = listaDeIngredientes;
+            Ingredientes = ingredientes;
             Preco = preco;
             Peso = peso ?? 1;
         }

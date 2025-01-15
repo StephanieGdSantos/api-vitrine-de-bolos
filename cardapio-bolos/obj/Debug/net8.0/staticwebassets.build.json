@@ -1,11 +1,12 @@
 {
   "Version": 1,
-  "Hash": "SXetoNFvqdeXicXjh01vRXziXW/mdgCTfehDp25FEV8=",
+  "Hash": "dcGUrZ9zbYPPxZItZdhZgvm4nETCHG3iK7cw+jcyARs=",
   "Source": "CardapioBolos",
   "BasePath": "_content/CardapioBolos",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
   "DiscoveryPatterns": [],
-  "Assets": []
+  "Assets": [],
+  "Endpoints": []
 }

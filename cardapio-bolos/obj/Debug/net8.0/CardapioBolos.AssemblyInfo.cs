@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CardapioBolos")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b963c20f139d7a170114b9951c76e6bb7ad754b9")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5650cb1d67d0e798fb8bf7829692c266081284d9")]
 [assembly: System.Reflection.AssemblyProductAttribute("CardapioBolos")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CardapioBolos")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

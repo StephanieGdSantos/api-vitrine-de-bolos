@@ -334,3 +334,7 @@ C:\Users\Stephanie Gomes\Desktop\Stephanie\Estudos\C#\api-cardapio-bolos\cardapi
 C:\Users\Stephanie Gomes\Desktop\Stephanie\Estudos\C#\api-cardapio-bolos\cardapio-bolos\obj\Debug\net8.0\CardapioBolos.pdb
 C:\Users\Stephanie Gomes\Desktop\Stephanie\Estudos\C#\api-cardapio-bolos\cardapio-bolos\obj\Debug\net8.0\CardapioBolos.genruntimeconfig.cache
 C:\Users\Stephanie Gomes\Desktop\Stephanie\Estudos\C#\api-cardapio-bolos\cardapio-bolos\obj\Debug\net8.0\ref\CardapioBolos.dll
+C:\Users\Stephanie Gomes\Desktop\Stephanie\Estudos\C#\api-cardapio-bolos\cardapio-bolos\bin\Debug\net8.0\CardapioBolos.staticwebassets.endpoints.json
+C:\Users\Stephanie Gomes\Desktop\Stephanie\Estudos\C#\api-cardapio-bolos\cardapio-bolos\obj\Debug\net8.0\staticwebassets.build.endpoints.json
+C:\Users\Stephanie Gomes\Desktop\Stephanie\Estudos\C#\api-cardapio-bolos\cardapio-bolos\obj\Debug\net8.0\staticwebassets\msbuild.CardapioBolos.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
+C:\Users\Stephanie Gomes\Desktop\Stephanie\Estudos\C#\api-cardapio-bolos\cardapio-bolos\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

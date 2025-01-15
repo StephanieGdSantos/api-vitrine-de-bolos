@@ -2,4 +2,4 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace CardapioBolos.Requests;
-public record BoloRequestEdit(int Id, string Nome, string Imagem, string Descricao, string ListaDeIngredientes, double Preco, double Peso);
+public record BoloRequestEdit(int Id, string Nome, string Imagem, string Descricao, List<Ingrediente> Ingredientes, double Preco, double Peso);
