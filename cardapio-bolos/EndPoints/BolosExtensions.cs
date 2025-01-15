@@ -15,7 +15,12 @@ public static class BolosExtensions
     {
         app.MapGet("/bolos", ([FromServices] DAL<Bolo> dal) =>
         {
-            return Results.Ok(dal.Listar().OrderBy(bolo => bolo.Nome));
+            var bolos = dal.Listar();
+
+            if (!bolos.Any())
+                return Results.NoContent();
+
+            return Results.Ok(bolos.OrderBy(bolo => bolo.Nome));
         });
 
         app.MapGet("/bolos/id={id}", ([FromServices] DAL<Bolo> dal, int id) =>

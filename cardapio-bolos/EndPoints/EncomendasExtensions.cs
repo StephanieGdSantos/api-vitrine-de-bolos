@@ -20,7 +20,11 @@ namespace CardapioBolos.EndPoints
                     return Results.Unauthorized();
                 }
 
-                return Results.Ok(dal.Listar().OrderBy(encomenda => encomenda.DataDaEntrega));
+                var encomendas = dal.Listar();
+                if (!encomendas.Any())
+                    return Results.NoContent();
+
+                return Results.Ok(encomendas.OrderBy(encomenda => encomenda.DataDaEntrega));
             });
 
             app.MapGet("/encomendas/{id}", ([FromServices] DAL<EncomendaDTO> dal, [FromServices] CardapioBolosContext context, ClaimsPrincipal usuario, int id) =>
