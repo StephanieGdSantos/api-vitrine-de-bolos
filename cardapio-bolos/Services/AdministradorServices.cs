@@ -1,6 +1,7 @@
 ﻿using CardapioBolos.Banco;
 using CardapioBolos.Model;
 using CardapioBolos.Utils;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 
 namespace CardapioBolos.Services
@@ -40,6 +41,27 @@ namespace CardapioBolos.Services
                 return false;
 
             return true;
+        }
+
+        public IResult ValidarDadosDoAdministrador(Administrador administrador)
+        {
+            var emailEhUsado = VerificarSeEmailJaEhUsado(administrador.Email);
+            if (emailEhUsado)
+                return Results.Problem("O e-mail já está cadastrado.");
+
+            if (administrador.Email == null || !new EmailAddressAttribute().IsValid(administrador.Email))
+                return Results.Problem("O e-mail inserido é inválido.");
+
+            if (administrador.Telefone.Length != 11 || !new PhoneAttribute().IsValid(administrador.Telefone))
+                return Results.Problem("O telefone inserido é inválido.");
+
+            return Results.Ok();
+        }
+
+        public string FormatarTelefone(string telefone)
+        {
+            var telefoneSemCaracteres = telefone.Replace("(", "").Replace(")", "").Replace("-", "").Replace(" ", "");
+            return telefoneSemCaracteres;
         }
     }
 }

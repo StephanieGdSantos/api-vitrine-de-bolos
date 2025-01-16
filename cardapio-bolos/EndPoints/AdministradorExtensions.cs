@@ -16,12 +16,14 @@ namespace CardapioBolos.EndPoints
         {
             app.MapPost("/admin", ([FromServices] DAL<Administrador> dal, [FromServices] AdministradorServices administradorServices, [FromBody] Administrador administrador, [FromServices] CardapioBolosContext context) =>
             {
-                var emailJaUsado = administradorServices.VerificarSeEmailJaEhUsado(administrador.Email);
-                if (emailJaUsado)
-                    return Results.Problem("O e-mail já está cadastrado.");
+                administrador.Telefone = administradorServices.FormatarTelefone(administrador.Telefone);
+                var validezDoUsuario = administradorServices.ValidarDadosDoAdministrador(administrador);
+                if (validezDoUsuario != Results.Ok())
+                    return validezDoUsuario;
 
                 var hashSenha = VerificadorDeSenha.GerarHashSenha(administrador.Senha);
                 var novoAdministrador = new Administrador(administrador.Nome, administrador.Telefone, administrador.Email, hashSenha);
+
                 dal.Adicionar(novoAdministrador);
                 return Results.Ok();
             });
