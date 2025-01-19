@@ -3,8 +3,8 @@ using CardapioBolos.DTO;
 using CardapioBolos.Model;
 using CardapioBolos.Requests;
 using CardapioBolos.Services;
+using CardapioBolos.Utils;
 using Microsoft.AspNetCore.Mvc;
-using subsequencia_mais_longa.Services;
 using System.Linq;
 using System.Security.Claims;
 
@@ -37,7 +37,7 @@ public static class BolosExtensions
         {
             var nomeProcurado = new BoloServices(context).FormatarNomeParaBusca(nome);
             var bolosExistentes = dal.Listar().Select(bolo => bolo.Nome).ToArray();
-            var bolosEncontrados = new Buscador().BuscarNomesSemelhantes(bolosExistentes, nomeProcurado);
+            var bolosEncontrados = Buscador.BuscarNomesSemelhantes(bolosExistentes, nomeProcurado);
 
             var bolos = dal.Listar().Where(bolo => bolosEncontrados.Contains(bolo.Nome.ToLower()));
             if (!bolos.Any())

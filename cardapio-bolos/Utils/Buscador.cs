@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace subsequencia_mais_longa.Services
+namespace CardapioBolos.Utils
 {
     public class Buscador
     {
@@ -35,15 +35,10 @@ namespace subsequencia_mais_longa.Services
             }
 
             var numeroDeOpcoes = 2;
-            if (resultados.Count == 1)
-            {
-                numeroDeOpcoes = 1;
-            }
-            else if (resultados.Count == 0)
-            {
-                numeroDeOpcoes = 0;
-            }
-            return resultados.OrderByDescending(r => r.Valor).Take(numeroDeOpcoes).Select(r => r.Palavra).ToList();
+            return resultados
+                .OrderByDescending(r => r.Valor)
+                .Take(numeroDeOpcoes)
+                .Select(r => r.Palavra).ToList();
         }
 
         public static List<string> BuscarPorMaiorProporcaoSemelhante(string[] palavrasDisponiveis, string palavraProcurada)
@@ -75,25 +70,27 @@ namespace subsequencia_mais_longa.Services
             }
 
             var numeroDeOpcoes = 2;
-            if (resultados.Count == 1)
-            {
-                numeroDeOpcoes = 1;
-            }
-            else if (resultados.Count == 0)
-            {
-                numeroDeOpcoes = 0;
-            }
-            return resultados.OrderByDescending(r => r.Proporcao).Take(numeroDeOpcoes).Select(r => r.Palavra).ToList();
+            return resultados
+                .OrderByDescending(r => r.Proporcao)
+                .Take(numeroDeOpcoes)
+                .Select(r => r.Palavra)
+                .ToList();
         }
 
-        public List<string> BuscarNomesSemelhantes(string[] palavrasDisponiveis, string palavraProcurada)
+        public static List<string> BuscarNomesSemelhantes(string[] palavrasDisponiveis, string palavraProcurada)
         {
             var nomesProximos = BuscarPorMaiorStringComum(palavrasDisponiveis, palavraProcurada);
             var nomesProporcionalmenteProximos = BuscarPorMaiorProporcaoSemelhante(palavrasDisponiveis, palavraProcurada);
 
-            var listaDeNomes = nomesProximos.Concat(nomesProporcionalmenteProximos).Distinct().ToList();
+            var listaDeNomes = nomesProximos
+                .Concat(nomesProporcionalmenteProximos)
+                .Distinct()
+                .ToList();
 
-            return listaDeNomes.Select(nome => nome.ToLower()).ToList();
+            return listaDeNomes
+                .Select(nome => nome
+                .ToLower())
+                .ToList();
         }
     }
 }
