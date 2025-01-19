@@ -18,6 +18,9 @@ namespace CardapioBolos.Services
         }
         public bool Autenticar(string email, string senha)
         {
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(senha))
+                return false;
+
             var administrador = _administradorDAL.Buscar(admin => admin.Email.Equals(email));
             if (administrador == null)
                 return false;
