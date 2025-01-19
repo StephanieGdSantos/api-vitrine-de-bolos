@@ -36,15 +36,25 @@ namespace CardapioBolos.EndPoints
                 return Results.Ok(ingrediente);
             });
 
-            app.MapPost("/ingredientes", ([FromServices] DAL<Ingrediente> dal, ClaimsPrincipal usuario, [FromServices] CardapioBolosContext context, [FromBody] string ingrediente) =>
+            app.MapPost("/ingredientes", ([FromServices] DAL<Ingrediente> dal, ClaimsPrincipal usuario, [FromServices] CardapioBolosContext context, [FromBody] List<string> listaIngredientes) =>
             {
                 var usuarioEhAdmin = new AdministradorServices(context).ValidaSeEhAdministrador(usuario);
                 if (!usuarioEhAdmin)
                     return Results.Unauthorized();
 
-                var novoIngrediente = new Ingrediente(ingrediente);
+                foreach (var ingrediente in listaIngredientes)
+                {
+                    if (dal.Buscar(ingr => ingr.Nome.Equals(ingrediente)) != null)
+                        return Results.Problem("O ingrediente já está cadastrado.");
+                }
 
-                dal.Adicionar(novoIngrediente);
+                var listaNovosIngredientes = new List<Ingrediente>();
+                foreach (var ingrediente in listaIngredientes)
+                    listaNovosIngredientes.Add(new Ingrediente(ingrediente));
+
+                foreach (var ingrediente in listaNovosIngredientes)
+                    dal.Adicionar(ingrediente);
+
                 return Results.Ok();
             });
 
