@@ -24,16 +24,16 @@ public static class BolosExtensions
             return Results.Ok(bolos.OrderBy(bolo => bolo.Nome));
         });
 
-        app.MapGet("/bolos/id={id}", ([FromServices] DAL<Bolo> dal, int id) =>
+        app.MapGet("/bolos/{id}", ([FromServices] DAL<Bolo> dal, int id) =>
         {
             var boloSelecionado = dal.BuscarPorId(id);
             if (boloSelecionado == null)
-                return Results.NotFound();
+                return Results.NoContent();
 
             return Results.Ok(boloSelecionado);
         });
 
-        app.MapGet("/bolos/{nome}", ([FromServices] DAL<Bolo> dal, [FromServices] CardapioBolosContext context, string nome) =>
+        app.MapGet("/bolos/nome={nome}", ([FromServices] DAL<Bolo> dal, [FromServices] CardapioBolosContext context, string nome) =>
         {
             var nomeProcurado = new BoloServices(context).FormatarNomeParaBusca(nome);
             var bolosExistentes = dal.Listar().Select(bolo => bolo.Nome).ToArray();
@@ -41,7 +41,7 @@ public static class BolosExtensions
 
             var bolos = dal.Listar().Where(bolo => bolosEncontrados.Contains(bolo.Nome.ToLower()));
             if (!bolos.Any())
-                return Results.NotFound();
+                return Results.NoContent();
 
             return Results.Ok(bolos);
         });
@@ -52,37 +52,43 @@ public static class BolosExtensions
             if (!usuarioEhAdmin)
                 return Results.Unauthorized();
 
-            var nomesIngredientesInseridos = bolo.Ingredientes.Select(ingrediente => ingrediente.Nome);
+            var nomesIngredientesInseridos = bolo.Ingredientes.Select(ingrediente => ingrediente.Nome).ToList();
 
             var ingredientesDoBolo = ingredienteDal.Listar()
                 .Where(ingrediente => nomesIngredientesInseridos.Contains(ingrediente.Nome))
                 .ToList();
+            
+            var erroNosIngredientes = new BoloServices(context).VerificarIngredientesNaoEncontrados(nomesIngredientesInseridos, ingredientesDoBolo);
+            if (erroNosIngredientes != "")
+                return Results.Problem(erroNosIngredientes);
 
             var novoBolo = new Bolo(bolo.Nome, bolo.Imagem, bolo.Descricao, ingredientesDoBolo, bolo.Preco);
             boloDal.Adicionar(novoBolo);
             return Results.Ok();
         });
 
-        app.MapPatch("/bolos", ([FromServices] DAL<Bolo> dal, [FromServices] CardapioBolosContext context, ClaimsPrincipal usuario,  [FromBody] BoloRequestEdit bolo) =>
+        app.MapPatch("/bolos/{id}", ([FromServices] DAL<Bolo> dal, [FromServices] DAL<Ingrediente> ingredientesDAL, [FromServices] CardapioBolosContext context, ClaimsPrincipal usuario,  [FromBody] BoloRequestEdit bolo, int id) =>
         {
             var usuarioEhAdmin = new AdministradorServices(context).ValidaSeEhAdministrador(usuario);
             if (!usuarioEhAdmin)
                 return Results.Unauthorized();
 
-            var boloAAtualizar = dal.BuscarPorId(bolo.Id);
+            var boloAAtualizar = dal.BuscarPorId(id);
             if (boloAAtualizar == null)
                 return Results.NotFound();
 
             var nomeIngredientesInseridos = bolo.Ingredientes
-            .Select(ingrediente => ingrediente.Nome);
-
-            var ingredientesDoBolo = dal.Listar()
-                .Where(ingrediente => nomeIngredientesInseridos.Contains(ingrediente.Nome))
+                .Select(ingrediente => ingrediente.Nome)
                 .ToList();
 
-            var boloAtualizado = new Bolo(bolo.Nome, bolo.Imagem, bolo.Descricao, bolo.Ingredientes, bolo.Preco)
+            var ingredientesDoBolo = ingredientesDAL.Listar()
+                .Where(ingrediente => nomeIngredientesInseridos
+                .Contains(ingrediente.Nome))
+                .ToList();
+
+            var boloAtualizado = new Bolo(bolo.Nome, bolo.Imagem, bolo.Descricao, ingredientesDoBolo, bolo.Preco, 1)
             {
-                Id = bolo.Id
+                Id = id,
             };
             dal.Editar(boloAtualizado);
             return Results.Ok();
@@ -102,4 +108,6 @@ public static class BolosExtensions
             return Results.NoContent();
         });
     }
+
+    
 }

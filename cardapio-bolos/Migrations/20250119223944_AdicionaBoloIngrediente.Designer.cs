@@ -4,6 +4,7 @@ using CardapioBolos.Banco;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace cardapio_bolos.Migrations
 {
     [DbContext(typeof(CardapioBolosContext))]
-    partial class CardapioBolosContextModelSnapshot : ModelSnapshot
+    [Migration("20250119223944_AdicionaBoloIngrediente")]
+    partial class AdicionaBoloIngrediente
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,6 +41,21 @@ namespace cardapio_bolos.Migrations
                     b.HasIndex("EncomendaId");
 
                     b.ToTable("BoloEncomenda");
+                });
+
+            modelBuilder.Entity("BoloIngrediente", b =>
+                {
+                    b.Property<int>("BoloId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IngredienteId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BoloId", "IngredienteId");
+
+                    b.HasIndex("IngredienteId");
+
+                    b.ToTable("BoloIngrediente");
                 });
 
             modelBuilder.Entity("CardapioBolos.Model.Administrador", b =>
@@ -118,21 +136,6 @@ namespace cardapio_bolos.Migrations
                     b.HasIndex("AdministradorId");
 
                     b.ToTable("Bolos");
-                });
-
-            modelBuilder.Entity("CardapioBolos.Model.BoloIngrediente", b =>
-                {
-                    b.Property<int>("BoloId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IngredienteId")
-                        .HasColumnType("int");
-
-                    b.HasKey("BoloId", "IngredienteId");
-
-                    b.HasIndex("IngredienteId");
-
-                    b.ToTable("BoloIngrediente", (string)null);
                 });
 
             modelBuilder.Entity("CardapioBolos.Model.Encomenda", b =>
@@ -219,16 +222,7 @@ namespace cardapio_bolos.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("CardapioBolos.Model.Bolo", b =>
-                {
-                    b.HasOne("CardapioBolos.Model.Administrador", "Administrador")
-                        .WithMany("Bolos")
-                        .HasForeignKey("AdministradorId");
-
-                    b.Navigation("Administrador");
-                });
-
-            modelBuilder.Entity("CardapioBolos.Model.BoloIngrediente", b =>
+            modelBuilder.Entity("BoloIngrediente", b =>
                 {
                     b.HasOne("CardapioBolos.Model.Bolo", null)
                         .WithMany()
@@ -241,6 +235,15 @@ namespace cardapio_bolos.Migrations
                         .HasForeignKey("IngredienteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("CardapioBolos.Model.Bolo", b =>
+                {
+                    b.HasOne("CardapioBolos.Model.Administrador", "Administrador")
+                        .WithMany("Bolos")
+                        .HasForeignKey("AdministradorId");
+
+                    b.Navigation("Administrador");
                 });
 
             modelBuilder.Entity("CardapioBolos.Model.Administrador", b =>

@@ -7,10 +7,12 @@ namespace CardapioBolos.Services
     public class BoloServices
     {
         private readonly DAL<Bolo> _bolosDAL;
+        private readonly CardapioBolosContext _context;
 
         public BoloServices(CardapioBolosContext context)
         {
             _bolosDAL = new DAL<Bolo>(context);
+            _context = context;
         }
 
         public List<Bolo>? ObterListaDeBolosInseridos(EncomendaRequest encomenda)
@@ -48,23 +50,21 @@ namespace CardapioBolos.Services
                 .Where(b => bolosId.Contains(b.Id))
                 .ToList();
 
-            var bolosNaoEncontrados = bolos
-                .Except(bolosEncontrados)
+            var nomeBolosNaoEncontrados = bolos
+                .Select(bolo => bolo.Nome)
+                .ToList()
+                .Except(bolosEncontrados
+                    .Select(bolo => bolo.Nome))
                 .ToList();
 
-            bolosNaoEncontrados.ForEach(bolo =>
+            var bolosNaoEncontrados = new List<Bolo>();
+
+            nomeBolosNaoEncontrados.ForEach(bolo =>
             {
-                bolo.Nome = "Bolo não encontrado";
-                bolo.Imagem = null;
-                bolo.Descricao = null;
-                bolo.Ingredientes = null;
-                bolo.Preco = 0;
-                bolo.Peso = 0;
-                bolo.Formato = null;
-                bolo.Observacao = null;
-                bolo.Topper = null;
-                bolo.PapelDeArroz = null;
-                bolo.Presente = null;
+                bolosNaoEncontrados.Add(new Bolo()
+                {
+                    Nome = bolo
+                });
             });
 
             bolosNaoEncontrados
@@ -78,11 +78,29 @@ namespace CardapioBolos.Services
 
         public string FormatarNomeParaBusca(string nome)
         {
-            var nomeProcurado = nome.Replace(" ", "+");
-            nomeProcurado.Split('+');
-            nomeProcurado = string.Join(" ", nomeProcurado).ToLower();
+            var nomeSemSimbolos = nome.Split('+');
+            var nomeProcurado = string.Join(" ", nomeSemSimbolos).ToLower();
 
             return nomeProcurado.ToLower();
+        }
+
+        public string VerificarIngredientesNaoEncontrados(List<string> nomesIngredientesInseridos, List<Ingrediente> ingredientesDoBolo)
+        {
+            var ingredientesNaoEncontrados = nomesIngredientesInseridos
+                            .Except(ingredientesDoBolo
+                            .Select(ingrediente => ingrediente.Nome))
+                            .ToList();
+
+            if (ingredientesNaoEncontrados.Count == 0)
+            {
+                return "";
+            }
+
+            string stringIngredientesNaoEncontrados = "";
+            if (ingredientesNaoEncontrados.Count > 0)
+                stringIngredientesNaoEncontrados = $"Os seguintes ingredientes não foram encontrados: {string.Join(", ", ingredientesNaoEncontrados)}";
+
+            return stringIngredientesNaoEncontrados;
         }
     }
 }
