@@ -4,6 +4,7 @@ using CardapioBolos.Banco;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace cardapio_bolos.Migrations
 {
     [DbContext(typeof(CardapioBolosContext))]
-    partial class CardapioBolosContextModelSnapshot : ModelSnapshot
+    [Migration("20250125010756_AdicionaManipulaçãoDaTabelaBoloEncomenda")]
+    partial class AdicionaManipulaçãoDaTabelaBoloEncomenda
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,7 +54,7 @@ namespace cardapio_bolos.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Administrador", (string)null);
+                    b.ToTable("Administrador");
                 });
 
             modelBuilder.Entity("CardapioBolos.Model.Bolo", b =>
@@ -102,7 +105,7 @@ namespace cardapio_bolos.Migrations
 
                     b.HasIndex("AdministradorId");
 
-                    b.ToTable("Bolos", (string)null);
+                    b.ToTable("Bolos");
                 });
 
             modelBuilder.Entity("CardapioBolos.Model.BoloEncomenda", b =>
@@ -184,7 +187,7 @@ namespace cardapio_bolos.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Encomendas", (string)null);
+                    b.ToTable("Encomendas");
                 });
 
             modelBuilder.Entity("CardapioBolos.Model.Ingrediente", b =>
@@ -201,7 +204,7 @@ namespace cardapio_bolos.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Ingrediente", (string)null);
+                    b.ToTable("Ingrediente");
                 });
 
             modelBuilder.Entity("CardapioBolos.Model.Bolo", b =>

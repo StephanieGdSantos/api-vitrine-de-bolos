@@ -1,4 +1,5 @@
 ﻿using CardapioBolos.Banco;
+using CardapioBolos.DTO;
 using CardapioBolos.Model;
 using CardapioBolos.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -23,15 +24,19 @@ namespace CardapioBolos.EndPoints
                 return Results.Ok(ingredientes);
             });
 
-            app.MapGet("/ingredientes/{id}", ([FromServices] DAL<Ingrediente> dal, ClaimsPrincipal usuario, [FromServices] CardapioBolosContext context, int id) =>
+            app.MapGet("/ingredientes/{id}", async ([FromServices] DAL<Ingrediente> dal, ClaimsPrincipal usuario, [FromServices] CardapioBolosContext context, int id) =>
             {
                 var usuarioEhAdmin = new AdministradorServices(context).ValidaSeEhAdministrador(usuario);
                 if (!usuarioEhAdmin)
                     return Results.Unauthorized();
 
-                var ingrediente = dal.BuscarPorId(id);
+                var ingrediente = await Task.Run(() => dal.Listar()
+                    .Where(i => i.Id == id)
+                    .Select(i => new IngredienteDTO { Nome = i.Nome })
+                    .FirstOrDefault());
+
                 if (ingrediente == null)
-                    return Results.NotFound();
+                    return Results.NoContent();
 
                 return Results.Ok(ingrediente);
             });
@@ -58,17 +63,19 @@ namespace CardapioBolos.EndPoints
                 return Results.Ok();
             });
 
-            app.MapPatch("/ingrediente/{id}", ([FromServices] DAL<Ingrediente> dal, ClaimsPrincipal usuario, [FromServices] CardapioBolosContext context, [FromBody] Ingrediente ingrediente) =>
+            app.MapPatch("/ingredientes/{id}", async ([FromServices] DAL<Ingrediente> dal, ClaimsPrincipal usuario, [FromServices] CardapioBolosContext context, [FromBody] string nomeIngrediente, int id) =>
             {
                 var usuarioEhAdmin = new AdministradorServices(context).ValidaSeEhAdministrador(usuario);
                 if (!usuarioEhAdmin)
                     return Results.Unauthorized();
 
-                var ingredienteExistente = dal.BuscarPorId(ingrediente.Id);
+                var ingredienteExistente = dal.BuscarPorId(id);
                 if (ingredienteExistente == null)
                     return Results.NotFound();
 
-                dal.Editar(ingrediente);
+                ingredienteExistente.Nome = nomeIngrediente;
+
+                await dal.Editar(ingredienteExistente);
                 return Results.Ok();
             });
 

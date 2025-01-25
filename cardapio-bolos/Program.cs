@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
-    options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+    options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault;
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
@@ -26,6 +26,7 @@ builder.Services.AddTransient<DAL<BoloDTO>>();
 builder.Services.AddTransient<DAL<IngredienteDTO>>();
 builder.Services.AddTransient<DAL<EnderecoDTO>>();
 builder.Services.AddTransient<DAL<BoloIngrediente>>();
+builder.Services.AddTransient<DAL<BoloEncomenda>>();
 builder.Services.AddScoped<EncomendaServices>();
 builder.Services.AddScoped<AdministradorServices>();
 builder.Services.AddScoped<BoloServices>();

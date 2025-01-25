@@ -1,6 +1,4 @@
-﻿
-
-namespace CardapioBolos.DTO
+﻿namespace CardapioBolos.DTO
 {
     public class EncomendaDTO
     {

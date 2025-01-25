@@ -24,9 +24,13 @@ public static class BolosExtensions
             return Results.Ok(bolos.OrderBy(bolo => bolo.Nome));
         });
 
-        app.MapGet("/bolos/{id}", ([FromServices] DAL<Bolo> dal, int id) =>
+        app.MapGet("/bolos/{id}", async ([FromServices] DAL<Bolo> dal, int id) =>
         {
-            var boloSelecionado = dal.BuscarPorId(id);
+            var boloSelecionado = await Task.Run(() => dal.Listar()
+                .Where(b => b.Id == id)
+                .Select(b => new BoloDTO() { Nome = b.Nome, Imagem = b.Imagem, Peso = b.Peso, Preco = b.Preco, Ingredientes = b.Ingredientes })
+                .FirstOrDefault());
+
             if (boloSelecionado == null)
                 return Results.NoContent();
 
@@ -74,6 +78,7 @@ public static class BolosExtensions
                 return Results.Unauthorized();
 
             var boloAAtualizar = dal.BuscarPorId(id);
+
             if (boloAAtualizar == null)
                 return Results.NotFound();
 

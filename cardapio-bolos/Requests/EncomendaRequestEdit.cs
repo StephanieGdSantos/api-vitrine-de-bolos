@@ -4,5 +4,5 @@ using System.Collections.Generic;
 
 namespace CardapioBolos.Requests
 {
-    public record EncomendaRequestEdit(int Id, string TelefoneCliente, List<Bolo> Bolos, double ValorFinal, bool Finalizado, DateTime DataDaEntrega, EnderecoDTO Endereco) { }
+    public record EncomendaRequestEdit(string TelefoneCliente, List<Bolo> Bolos, double ValorFinal, bool Finalizado, DateTime DataDaEntrega, EnderecoDTO Endereco) { }
 }

@@ -127,8 +127,30 @@
   },
   {
     "ContainingType": "CardapioBolos.EndPoints.BolosExtensions\u002B\u003C\u003Ec",
+    "Method": "\u003CAddEndpointsBolos\u003Eb__0_1",
+    "RelativePath": "bolos/{id}",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "CardapioBolos.EndPoints.BolosExtensions\u002B\u003C\u003Ec",
     "Method": "\u003CAddEndpointsBolos\u003Eb__0_4",
-    "RelativePath": "bolos",
+    "RelativePath": "bolos/{id}",
     "HttpMethod": "PATCH",
     "IsController": false,
     "Order": 0,
@@ -136,6 +158,11 @@
       {
         "Name": "bolo",
         "Type": "CardapioBolos.Requests.BoloRequestEdit",
+        "IsRequired": true
+      },
+      {
+        "Name": "id",
+        "Type": "System.Int32",
         "IsRequired": true
       }
     ],
@@ -172,7 +199,7 @@
   {
     "ContainingType": "CardapioBolos.EndPoints.BolosExtensions\u002B\u003C\u003Ec",
     "Method": "\u003CAddEndpointsBolos\u003Eb__0_2",
-    "RelativePath": "bolos/{nome}",
+    "RelativePath": "bolos/nome={nome}",
     "HttpMethod": "GET",
     "IsController": false,
     "Order": 0,
@@ -180,28 +207,6 @@
       {
         "Name": "nome",
         "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "CardapioBolos.EndPoints.BolosExtensions\u002B\u003C\u003Ec",
-    "Method": "\u003CAddEndpointsBolos\u003Eb__0_1",
-    "RelativePath": "bolos/id={id}",
-    "HttpMethod": "GET",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
         "IsRequired": true
       }
     ],
@@ -253,15 +258,15 @@
   },
   {
     "ContainingType": "CardapioBolos.EndPoints.EncomendasExtensions\u002B\u003C\u003Ec",
-    "Method": "\u003CAddEndpointsEncomendas\u003Eb__0_3",
-    "RelativePath": "encomendas",
-    "HttpMethod": "PATCH",
+    "Method": "\u003CAddEndpointsEncomendas\u003Eb__0_1",
+    "RelativePath": "encomendas/{id}",
+    "HttpMethod": "GET",
     "IsController": false,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "encomenda",
-        "Type": "CardapioBolos.Requests.EncomendaRequestEdit",
+        "Name": "id",
+        "Type": "System.Int32",
         "IsRequired": true
       }
     ],
@@ -275,12 +280,17 @@
   },
   {
     "ContainingType": "CardapioBolos.EndPoints.EncomendasExtensions\u002B\u003C\u003Ec",
-    "Method": "\u003CAddEndpointsEncomendas\u003Eb__0_1",
+    "Method": "\u003CAddEndpointsEncomendas\u003Eb__0_3",
     "RelativePath": "encomendas/{id}",
-    "HttpMethod": "GET",
+    "HttpMethod": "PATCH",
     "IsController": false,
     "Order": 0,
     "Parameters": [
+      {
+        "Name": "encomenda",
+        "Type": "CardapioBolos.Requests.EncomendaRequestEdit",
+        "IsRequired": true
+      },
       {
         "Name": "id",
         "Type": "System.Int32",
@@ -319,28 +329,6 @@
   },
   {
     "ContainingType": "CardapioBolos.EndPoints.IngredientesExtensions\u002B\u003C\u003Ec",
-    "Method": "\u003CAddEndpointsIngredientes\u003Eb__0_3",
-    "RelativePath": "ingrediente/{id}",
-    "HttpMethod": "PATCH",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "ingrediente",
-        "Type": "CardapioBolos.Model.Ingrediente",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "CardapioBolos.EndPoints.IngredientesExtensions\u002B\u003C\u003Ec",
     "Method": "\u003CAddEndpointsIngredientes\u003Eb__0_0",
     "RelativePath": "ingredientes",
     "HttpMethod": "GET",
@@ -364,8 +352,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "ingrediente",
-        "Type": "System.String",
+        "Name": "listaIngredientes",
+        "Type": "System.Collections.Generic.List\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "IsRequired": true
       }
     ],
@@ -385,6 +373,33 @@
     "IsController": false,
     "Order": 0,
     "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "CardapioBolos.EndPoints.IngredientesExtensions\u002B\u003C\u003Ec",
+    "Method": "\u003CAddEndpointsIngredientes\u003Eb__0_3",
+    "RelativePath": "ingredientes/{id}",
+    "HttpMethod": "PATCH",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "nomeIngrediente",
+        "Type": "System.String",
+        "IsRequired": true
+      },
       {
         "Name": "id",
         "Type": "System.Int32",

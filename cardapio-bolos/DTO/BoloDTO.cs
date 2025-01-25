@@ -1,8 +1,10 @@
-﻿namespace CardapioBolos.DTO;
+﻿using CardapioBolos.Model;
+
+namespace CardapioBolos.DTO;
 
 public class BoloDTO
 {
-    public int Id { get; set; }
+    public int? Id { get; set; }
     public string Nome { get; set; }
     public string Imagem { get; set; }
     public double Preco { get; set; }
@@ -12,4 +14,5 @@ public class BoloDTO
     public string? Observacao { get; set; }
     public string? Formato { get; set; }
     public double Peso { get; set; }
+    public List<Ingrediente>? Ingredientes { get; set; }
 }

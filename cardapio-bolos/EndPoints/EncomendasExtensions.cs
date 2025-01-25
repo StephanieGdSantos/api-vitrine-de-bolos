@@ -25,7 +25,7 @@ namespace CardapioBolos.EndPoints
                 return Results.Ok(encomendas.OrderBy(encomenda => encomenda.DataDaEntrega));
             });
 
-            app.MapGet("/encomendas/{id}", ([FromServices] DAL<EncomendaDTO> dal, [FromServices] CardapioBolosContext context, ClaimsPrincipal usuario, int id) =>
+            app.MapGet("/encomendas/{id}", ([FromServices] DAL<Encomenda> dal, [FromServices] CardapioBolosContext context, ClaimsPrincipal usuario, int id) =>
             {
                 var usuarioEhAdmin = new AdministradorServices(context).ValidaSeEhAdministrador(usuario);
                 if (!usuarioEhAdmin)
@@ -33,7 +33,7 @@ namespace CardapioBolos.EndPoints
 
                 var encomenda = dal.BuscarPorId(id);
                 if (encomenda == null)
-                    return Results.NotFound();
+                    return Results.NoContent();
 
                 return Results.Ok(encomenda);
             });
@@ -44,30 +44,44 @@ namespace CardapioBolos.EndPoints
                 if (novaEncomenda == null)
                     return Results.Problem("Erro ao criar encomenda.");
 
+                var bolosInvalidos = novaEncomenda.Bolos
+                    .Where(bolo => bolosDAL.BuscarPorId(bolo.Id) == null)
+                    .Select(bolo => bolo.Nome)
+                    .ToList();
+
+                if (bolosInvalidos.Count != 0)
+                    return Results.Problem($"Os seguintes bolos não foram encontrados: {string.Join(", ", bolosInvalidos)}");
+
                 dalEncomenda.Adicionar(novaEncomenda);
                 return Results.Ok();
             });
 
-            app.MapPatch("/encomendas", ([FromServices] DAL<Encomenda> dal, [FromServices] CardapioBolosContext context, ClaimsPrincipal usuario, [FromBody] EncomendaRequestEdit encomenda) =>
+            app.MapPatch("/encomendas/{id}", ([FromServices] DAL<Encomenda> dal, [FromServices] CardapioBolosContext context, ClaimsPrincipal usuario, [FromBody] EncomendaRequestEdit encomenda, int id) =>
             {
                 var usuarioEhAdmin = new AdministradorServices(context).ValidaSeEhAdministrador(usuario);
                 if (!usuarioEhAdmin)
                     return Results.Unauthorized();
 
-                var encomendaExistente = dal.BuscarPorId(encomenda.Id);
+                var encomendaExistente = dal.BuscarPorId(id);
                 if (encomendaExistente == null)
                     return Results.NotFound();
 
                 var novaEncomenda = new Encomenda()
                 {
+                    Id = id,
                     TelefoneCliente = encomenda.TelefoneCliente,
                     Bolos = encomenda.Bolos,
                     ValorFinal = encomenda.ValorFinal,
                     Finalizado = encomenda.Finalizado,
-                    DataDaEntrega = encomenda.DataDaEntrega
+                    DataDaEntrega = encomenda.DataDaEntrega,
+                    Cidade = encomenda.Endereco.Cidade,
+                    Bairro = encomenda.Endereco.Bairro,
+                    Logradouro = encomenda.Endereco.Logradouro,
+                    Numero = encomenda.Endereco.Numero,
+                    Complemento = encomenda.Endereco.Complemento
                 };
 
-                dal.Editar(novaEncomenda);
+                Task task = dal.Editar(novaEncomenda);
                 return Results.Ok();
             });
 

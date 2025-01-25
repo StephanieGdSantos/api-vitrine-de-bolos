@@ -72,6 +72,7 @@ public class DAL<T> where T : class
             if (bolosQueIraoSairDaEncomenda.Any())
                 context.Set<BoloEncomenda>().RemoveRange(bolosQueIraoSairDaEncomenda);
             context.Set<BoloEncomenda>().AddRange(novosBolosDaEncomenda);
+        }
         else
         {
             context.Set<T>().Update(objeto);
