@@ -28,7 +28,7 @@ public static class BolosExtensions
         {
             var boloSelecionado = await Task.Run(() => dal.Listar()
                 .Where(b => b.Id == id)
-                .Select(b => new BoloDTO() { Nome = b.Nome, Imagem = b.Imagem, Peso = b.Peso, Preco = b.Preco, Ingredientes = b.Ingredientes })
+                .Select(b => new BoloDTO() {Id = id, Nome = b.Nome, Descricao = b.Descricao, Imagem = b.Imagem, Peso = b.Peso, Preco = b.Preco, Ingredientes = b.Ingredientes })
                 .FirstOrDefault());
 
             if (boloSelecionado == null)
@@ -43,7 +43,12 @@ public static class BolosExtensions
             var bolosExistentes = dal.Listar().Select(bolo => bolo.Nome).ToArray();
             var bolosEncontrados = Buscador.BuscarNomesSemelhantes(bolosExistentes, nomeProcurado);
 
-            var bolos = dal.Listar().Where(bolo => bolosEncontrados.Contains(bolo.Nome.ToLower()));
+            var bolos = dal.Listar()
+                .Where(bolo => bolosEncontrados
+                    .Contains(bolo.Nome
+                    .ToLower()))
+                .Select(b => new BoloDTO() { Id = b.Id, Nome = b.Nome, Descricao = b.Descricao, Imagem = b.Imagem, Peso = b.Peso, Preco = b.Preco, Ingredientes = b.Ingredientes });
+
             if (!bolos.Any())
                 return Results.NoContent();
 
@@ -71,7 +76,7 @@ public static class BolosExtensions
             return Results.Ok();
         });
 
-        app.MapPatch("/bolos/{id}", ([FromServices] DAL<Bolo> dal, [FromServices] DAL<Ingrediente> ingredientesDAL, [FromServices] CardapioBolosContext context, ClaimsPrincipal usuario,  [FromBody] BoloRequestEdit bolo, int id) =>
+        app.MapPatch("/bolos/{id}", async ([FromServices] DAL<Bolo> dal, [FromServices] DAL<Ingrediente> ingredientesDAL, [FromServices] CardapioBolosContext context, ClaimsPrincipal usuario,  [FromBody] BoloRequestEdit bolo, int id) =>
         {
             var usuarioEhAdmin = new AdministradorServices(context).ValidaSeEhAdministrador(usuario);
             if (!usuarioEhAdmin)
@@ -80,7 +85,7 @@ public static class BolosExtensions
             var boloAAtualizar = dal.BuscarPorId(id);
 
             if (boloAAtualizar == null)
-                return Results.NotFound();
+                return Results.NoContent();
 
             var nomeIngredientesInseridos = bolo.Ingredientes
                 .Select(ingrediente => ingrediente.Nome)
@@ -91,11 +96,15 @@ public static class BolosExtensions
                 .Contains(ingrediente.Nome))
                 .ToList();
 
+            var erroNosIngredientes = new BoloServices(context).VerificarIngredientesNaoEncontrados(nomeIngredientesInseridos, ingredientesDoBolo);
+            if (erroNosIngredientes != "")
+                return Results.Problem(erroNosIngredientes);
+
             var boloAtualizado = new Bolo(bolo.Nome, bolo.Imagem, bolo.Descricao, ingredientesDoBolo, bolo.Preco, 1)
             {
                 Id = id,
             };
-            dal.Editar(boloAtualizado);
+            await dal.Editar(boloAtualizado);
             return Results.Ok();
         });
 

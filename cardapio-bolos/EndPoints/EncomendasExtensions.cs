@@ -64,7 +64,7 @@ namespace CardapioBolos.EndPoints
 
                 var encomendaExistente = dal.BuscarPorId(id);
                 if (encomendaExistente == null)
-                    return Results.NotFound();
+                    return Results.NoContent();
 
                 var novaEncomenda = new Encomenda()
                 {

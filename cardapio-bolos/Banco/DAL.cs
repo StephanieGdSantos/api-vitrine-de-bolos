@@ -48,10 +48,12 @@ public class DAL<T> where T : class
             throw new InvalidOperationException("A entidade não possui uma propriedade 'Id'.");
 
         var chave = chaveDaPropriedade.GetValue(objeto);
-        /*var entidadeExiste = await context.Set<T>().FindAsync(chave);
 
-        if (entidadeExiste != null)
-            context.Entry(entidadeExiste).State = EntityState.Detached;*/
+        var entidadeExistente = await context.Set<T>().FindAsync(chave);
+        if (entidadeExistente != null)
+        {
+            context.Entry(entidadeExistente).State = EntityState.Detached;
+        }
 
         if (objeto is Bolo bolo)
         {
@@ -71,13 +73,11 @@ public class DAL<T> where T : class
             var bolosQueIraoSairDaEncomenda = bolosExistentesNaEncomenda.Except(novosBolosDaEncomenda).ToList();
             if (bolosQueIraoSairDaEncomenda.Any())
                 context.Set<BoloEncomenda>().RemoveRange(bolosQueIraoSairDaEncomenda);
+
             context.Set<BoloEncomenda>().AddRange(novosBolosDaEncomenda);
         }
-        else
-        {
-            context.Set<T>().Update(objeto);
-        }
 
+        context.Set<T>().Update(objeto);
         await context.SaveChangesAsync();
     }
 }

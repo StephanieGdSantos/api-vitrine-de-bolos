@@ -49,7 +49,7 @@ namespace CardapioBolos.EndPoints
 
                 foreach (var ingrediente in listaIngredientes)
                 {
-                    if (dal.Buscar(ingr => ingr.Nome.Equals(ingrediente)) != null)
+                    if (dal.Buscar(ingr => ingr.Nome.ToLower().Equals(ingrediente.ToLower())) != null)
                         return Results.Problem("O ingrediente já está cadastrado.");
                 }
 
