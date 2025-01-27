@@ -63,6 +63,9 @@ namespace CardapioBolos.Services
 
         public string FormatarTelefone(string telefone)
         {
+            if (telefone == null)
+                return "";
+
             var telefoneSemCaracteres = telefone.Replace("(", "").Replace(")", "").Replace("-", "").Replace(" ", "");
             return telefoneSemCaracteres;
         }
