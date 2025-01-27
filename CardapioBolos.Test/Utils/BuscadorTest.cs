@@ -4,15 +4,16 @@ namespace CardapioBolos.Test.Utils
 {
     public class BuscadorTest
     {
-        [Fact]
-        public void BuscarPorMaiorStringComum_QuandoAsPalavrasDisponiveisForemVazias_DeveRetornarVazio()
+
+        [Theory]
+        [InlineData(new string[] { }, "bolo", new string[] { })]
+        [InlineData(new string[] { "bolo", "bola", "bala", "bela", "rolo", "rua", "poço" }, "bolo", new string[] { "bolo", "bola" })]
+        [InlineData(new string[] { "bolo", "bola", "bala", "bela" }, "bola", new string[] { "bola", "bolo" })]
+        public void BuscarPorMaiorStringComum_DeveRetornarResultadoEsperado(string[] listaPalavrasDisponiveis, string palavraProcurada, string[] resultadoEsperado)
         {
-            var palavrasDisponiveis = new string[] { };
-            var palavraProcurada = "bolo";
+            var resultado = Buscador.BuscarPorMaiorStringComum(listaPalavrasDisponiveis, palavraProcurada);
 
-            var resultado = Buscador.BuscarPorMaiorStringComum(palavrasDisponiveis, palavraProcurada);
-
-            Assert.Empty(resultado);
+            Assert.Equal(resultadoEsperado, resultado);
         }
 
         [Fact]
@@ -26,37 +27,15 @@ namespace CardapioBolos.Test.Utils
             Assert.Equal(2, resultado.Count());
         }
 
-        [Fact]
-        public void BuscarPorMaiorStringComum_QuandoHouverVariasPalavrasSemelhantes_RetornaAsDuasMaisProximas()
+        [Theory]
+        [InlineData(new string[] { }, "bolo", new string[] { })]
+        [InlineData(new string[] { "bolo", "bola", "bala", "bela", "rolo", "rua", "poço" }, "bolo", new string[] { "bolo", "bola" })]
+        [InlineData(new string[] { "bolo", "bola", "bala", "bela" }, "bola", new string[] { "bola", "bolo" })]
+        public void BuscarPorMaiorProporcaoSemelhante_DeveRetornarResultadoEsperado(string[] listaPalavrasDisponiveis, string palavraProcurada, string[] resultadoEsperado)
         {
-            var palavrasDisponiveis = new string[] { "bolo", "bola", "bala", "bela", "rolo", "rua", "po�o" };
-            var palavraProcurada = "bolo";
+            var resultado = Buscador.BuscarPorMaiorProporcaoSemelhante(listaPalavrasDisponiveis, palavraProcurada);
 
-            var resultado = Buscador.BuscarPorMaiorStringComum(palavrasDisponiveis, palavraProcurada);
-
-            Assert.Equal(new string[] { "bolo", "bola" }, resultado);
-        }
-
-        [Fact]
-        public void BuscarPorMaiorStringComum_QuandoHouverEmpateDeSemelhanca_RetornaAsDuasMaisProximas()
-        {
-            var palavrasDisponiveis = new string[] { "bolo", "bola", "bala", "bela" };
-            var palavraProcurada = "bola";
-
-            var resultado = Buscador.BuscarPorMaiorStringComum(palavrasDisponiveis, palavraProcurada);
-
-            Assert.Equal(new string[] { "bola", "bolo" }, resultado);
-        }
-
-        [Fact]
-        public void BuscarPorMaiorProporcaoSemelhante_QuandoAsPalavrasDisponiveisForemVazias_DeveRetornarVazio()
-        {
-            var palavrasDisponiveis = new string[] { };
-            var palavraProcurada = "bolo";
-
-            var resultado = Buscador.BuscarPorMaiorProporcaoSemelhante(palavrasDisponiveis, palavraProcurada);
-
-            Assert.Empty(resultado);
+            Assert.Equal(resultadoEsperado, resultado);
         }
 
         [Fact]
@@ -70,37 +49,15 @@ namespace CardapioBolos.Test.Utils
             Assert.Equal(2, resultado.Count());
         }
 
-        [Fact]
-        public void BuscarPorMaiorProporcaoSemelhante_QuandoHouverVariasPalavrasSemelhantes_RetornaAsDuasMaisProximas()
+        [Theory]
+        [InlineData(new string[] { }, "bolo", new string[] { })]
+        [InlineData(new string[] { "bolo", "bola", "bala", "bela", "rolo", "rua", "poço" }, "bolo", new string[] { "bolo", "bola" })]
+        [InlineData(new string[] { "bolo", "bola", "bala", "bela" }, "bola", new string[] { "bola", "bolo" })]
+        public void BuscarNomesSemelhantes_DeveRetornarResultadoEsperado(string[] palavrasDisponiveis, string palavraProcurada, string[] resultadoEsperado)
         {
-            var palavrasDisponiveis = new string[] { "bolo", "bola", "bala", "bela", "rolo", "rua", "poço" };
-            var palavraProcurada = "bolo";
-
-            var resultado = Buscador.BuscarPorMaiorProporcaoSemelhante(palavrasDisponiveis, palavraProcurada);
-
-            Assert.Equal(new string[] { "bolo", "bola" }, resultado);
-        }
-
-        [Fact]
-        public void BuscarPorMaiorProporcaoSemelhante_QuandoHouverEmpateDeSemelhanca_RetornaAsDuasMaisProximas()
-        {
-            var palavrasDisponiveis = new string[] { "bolo", "bola", "bala", "bela" };
-            var palavraProcurada = "bola";
-
-            var resultado = Buscador.BuscarPorMaiorProporcaoSemelhante(palavrasDisponiveis, palavraProcurada);
-
-            Assert.Equal(new string[] { "bola", "bolo" }, resultado);
-        }
-
-        [Fact]
-        public void BuscarNomesSemelhantes_QuandoAsPalavrasDisponiveisForemVazias_DeveRetornarVazio()
-        {
-            var palavrasDisponiveis = new string[] { };
-            var palavraProcurada = "bolo";
-
             var resultado = Buscador.BuscarNomesSemelhantes(palavrasDisponiveis, palavraProcurada);
 
-            Assert.Empty(resultado);
+            Assert.Equal(resultadoEsperado, resultado);
         }
 
         [Fact]
@@ -112,28 +69,6 @@ namespace CardapioBolos.Test.Utils
             var resultado = Buscador.BuscarNomesSemelhantes(palavrasDisponiveis, palavraProcurada);
 
             Assert.Equal(2, resultado.Count());
-        }
-
-        [Fact]
-        public void BuscarNomesSemelhantes_QuandoHouverVariasPalavrasSemelhantes_RetornaAsDuasMaisProximas()
-        {
-            var palavrasDisponiveis = new string[] { "bolo", "bola", "bala", "bela", "rolo", "rua", "poço" };
-            var palavraProcurada = "bolo";
-
-            var resultado = Buscador.BuscarNomesSemelhantes(palavrasDisponiveis, palavraProcurada);
-
-            Assert.Equal(new string[] { "bolo", "bola" }, resultado);
-        }
-
-        [Fact]
-        public void BuscarNomesSemelhantes_QuandoHouverEmpateDeSemelhanca_RetornaAsDuasMaisProximas()
-        {
-            var palavrasDisponiveis = new string[] { "bolo", "bola", "bala", "bela" };
-            var palavraProcurada = "bola";
-
-            var resultado = Buscador.BuscarNomesSemelhantes(palavrasDisponiveis, palavraProcurada);
-
-            Assert.Equal(new string[] { "bola", "bolo" }, resultado);
         }
     }
 }
