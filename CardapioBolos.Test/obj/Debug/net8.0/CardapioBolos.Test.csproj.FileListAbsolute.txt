@@ -168,3 +168,4 @@ C:\Users\Stephanie Gomes\Desktop\Stephanie\Estudos\C#\api-cardapio-bolos\Cardapi
 C:\Users\Stephanie Gomes\Desktop\Stephanie\Estudos\C#\api-cardapio-bolos\CardapioBolos.Test\obj\Debug\net8.0\CardapioBolos.Test.genruntimeconfig.cache
 C:\Users\Stephanie Gomes\Desktop\Stephanie\Estudos\C#\api-cardapio-bolos\CardapioBolos.Test\obj\Debug\net8.0\ref\CardapioBolos.Test.dll
 C:\Users\Stephanie Gomes\Desktop\Stephanie\Estudos\C#\api-cardapio-bolos\CardapioBolos.Test\bin\Debug\net8.0\Bogus.dll
+C:\Users\Stephanie Gomes\Desktop\Stephanie\Estudos\C#\api-cardapio-bolos\CardapioBolos.Test\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.InMemory.dll
