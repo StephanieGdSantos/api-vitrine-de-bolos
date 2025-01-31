@@ -47,33 +47,18 @@ namespace CardapioBolos.Services
 
             var bolosEncontrados = _bolosDAL
                 .Listar()
-                .Where(b => bolosId.Contains(b.Id))
+                .Where(b => bolosId
+                    .Contains(b.Id))
+                .OrderBy(b => bolosId.IndexOf(b.Id))
                 .ToList();
 
-            var nomeBolosNaoEncontrados = bolos
-                .Select(bolo => bolo.Nome)
-                .ToList()
-                .Except(bolosEncontrados
-                    .Select(bolo => bolo.Nome))
+            var bolosNaoEncontrados = bolos
+                .Where(bolo => !bolosEncontrados
+                    .Any(b => b.Id == bolo.Id))
+                .Select(bolo => new Bolo { Nome = bolo.Nome })
                 .ToList();
 
-            var bolosNaoEncontrados = new List<Bolo>();
-
-            nomeBolosNaoEncontrados.ForEach(bolo =>
-            {
-                bolosNaoEncontrados.Add(new Bolo()
-                {
-                    Nome = bolo
-                });
-            });
-
-            bolosNaoEncontrados
-                .ForEach(bolo => bolosEncontrados
-                    .Add(bolo));
-
-            var bolosAInserir = bolosEncontrados;
-
-            return bolosAInserir;
+            return bolosEncontrados;
         }
 
         public string FormatarNomeParaBusca(string nome)
