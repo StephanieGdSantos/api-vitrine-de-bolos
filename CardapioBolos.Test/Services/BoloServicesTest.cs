@@ -19,47 +19,66 @@ namespace CardapioBolos.Test.Services
             _boloServices = new BoloServices(_context);
         }
 
-        [Theory]
-        [InlineData("2023-01-01", "Cliente", "12345678910", new object[] { }, 100.00, "2023-01-01", "Cidade", "Bairro", "Logradouro", "Numero", "Complemento", null)]
-        [InlineData("2023-01-01", "Cliente", "12345678910", new object[] { new object[] { 1, "Bolo de Cenoura", "https://www.receiteria.com.br/wp-content/uploads/receitas-de-bolo-de-cenoura-1-730x449.jpg", "Bolo de cenoura com cobertura de chocolate", new object[] { }, 20.0 } }, 100.00, "2023-01-01", "Cidade", "Bairro", "Logradouro", "Numero", "Complemento", new object[] { new object[] { 1, "Bolo de Cenoura", "https://www.receiteria.com.br/wp-content/uploads/receitas-de-bolo-de-cenoura-1-730x449.jpg", "Bolo de cenoura com cobertura de chocolate", new object[] { }, 20.0 } })]
-        public void ObterListaDeBolosInseridos_DeveRetornarRespostaEsperada(string dataDoPedido, string nomeCliente, string telefoneCliente, object[] bolos, double valorFinal, string dataDaEntrega, string cidade, string bairro, string logradouro, string numero, string complemento, object[] boloEsperadoNoRetorno)
+        public static IEnumerable<object[]> GetEncomendaRequests()
         {
-            // Arrange
-            var dataPedido = DateTime.Parse(dataDoPedido);
-            var dataEntrega = DateTime.Parse(dataDaEntrega);
-            var bolosList = bolos.Select(b => new Bolo
+            var endereco = new EnderecoDTO
             {
-                Id = (int)((object[])b)[0],
-                Nome = (string)((object[])b)[1],
-                Imagem = (string)((object[])b)[2],
-                Descricao = (string)((object[])b)[3],
-                Ingredientes = ((object[])((object[])b)[4]).Cast<Ingrediente>().ToList(),
-                Preco = (double)((object[])b)[5]
-            }).ToList();
+                Cidade = "Cidade Teste",
+                Bairro = "Bairro Teste",
+                Logradouro = "Logradouro Teste",
+                Numero = "123",
+                Complemento = "Complemento Teste"
+            };
 
-            List<Bolo> resultadoEsperado = null;
-            if (boloEsperadoNoRetorno != null)
+            var bolo1 = new Bolo { Id = 1, Nome = "Bolo de Chocolate", Peso = 1, Formato = "Redondo", Observacao = "Sem açúcar", Topper = true, PapelDeArroz = false, Presente = true, Preco = 25.0 };
+            var bolo2 = new Bolo { Id = 2, Nome = "Bolo de Cenoura", Peso = 1, Formato = "Quadrado", Observacao = "Com cobertura", Topper = false, PapelDeArroz = true, Presente = false, Preco = 20.0 };
+
+            yield return new object[]
             {
-                resultadoEsperado = boloEsperadoNoRetorno.Select(b => new Bolo
-                {
-                    Id = (int)((object[])b)[0],
-                    Nome = (string)((object[])b)[1],
-                    Imagem = (string)((object[])b)[2],
-                    Descricao = (string)((object[])b)[3],
-                    Ingredientes = ((object[])((object[])b)[4]).Cast<Ingrediente>().ToList(),
-                    Preco = (double)((object[])b)[5],
-                    Peso = 1
-                }).ToList();
+                new EncomendaRequest(DateTime.Now, "Cliente Teste", "123456789", new List<Bolo> { bolo1, bolo2 }, 45.0, DateTime.Now.AddDays(1), endereco),
+                new List<Bolo> { bolo1, bolo2 }
+            };
+
+            yield return new object[]
+            {
+                new EncomendaRequest(DateTime.Now, "Cliente Teste", "123456789", new List<Bolo> { bolo1 }, 25.0, DateTime.Now.AddDays(1), endereco),
+                new List<Bolo> { bolo1 }
+            };
+
+            yield return new object[]
+            {
+                new EncomendaRequest(DateTime.Now, "Cliente Teste", "123456789", new List<Bolo>(), 0.0, DateTime.Now.AddDays(1), endereco),
+                null
+            };
+        }
+
+        [Theory]
+        [MemberData(nameof(GetEncomendaRequests))]
+        public void ObterListaDeBolosInseridos_DeveRetornarListaDeBolosEsperada(EncomendaRequest encomendaRequest, List<Bolo> bolosEsperados)
+        {
+            var resultado = _boloServices.ObterListaDeBolosInseridos(encomendaRequest);
+
+            if (bolosEsperados == null)
+            {
+                Assert.Null(resultado);
             }
-
-            var endereco = new EnderecoDTO { Cidade = cidade, Bairro = bairro, Logradouro = logradouro, Numero = numero, Complemento = complemento };
-            var encomenda = new EncomendaRequest(dataPedido, nomeCliente, telefoneCliente, bolosList, valorFinal, dataEntrega, endereco);
-
-            // Act
-            var resultado = _boloServices.ObterListaDeBolosInseridos(encomenda);
-
-            // Assert
-            Assert.Equal(resultadoEsperado, resultado);
+            else
+            {
+                Assert.NotNull(resultado);
+                Assert.Equal(bolosEsperados.Count, resultado.Count);
+                for (int i = 0; i < bolosEsperados.Count; i++)
+                {
+                    Assert.Equal(bolosEsperados[i].Id, resultado[i].Id);
+                    Assert.Equal(bolosEsperados[i].Nome, resultado[i].Nome);
+                    Assert.Equal(bolosEsperados[i].Peso, resultado[i].Peso);
+                    Assert.Equal(bolosEsperados[i].Formato, resultado[i].Formato);
+                    Assert.Equal(bolosEsperados[i].Observacao, resultado[i].Observacao);
+                    Assert.Equal(bolosEsperados[i].Topper, resultado[i].Topper);
+                    Assert.Equal(bolosEsperados[i].PapelDeArroz, resultado[i].PapelDeArroz);
+                    Assert.Equal(bolosEsperados[i].Presente, resultado[i].Presente);
+                    Assert.Equal(bolosEsperados[i].Preco, resultado[i].Preco);
+                }
+            }
         }
 
         [Theory]
