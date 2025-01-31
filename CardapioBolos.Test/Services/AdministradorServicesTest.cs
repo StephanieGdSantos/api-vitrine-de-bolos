@@ -1,14 +1,8 @@
-﻿using Bogus;
-using CardapioBolos.Banco;
+﻿using CardapioBolos.Banco;
 using CardapioBolos.Model;
 using CardapioBolos.Services;
 using CardapioBolos.Test.Fixtures;
-using CardapioBolos.Utils;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace CardapioBolos.Test.Services
 {
