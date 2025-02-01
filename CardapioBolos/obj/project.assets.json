@@ -5453,11 +5453,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Stephanie Gomes\\Desktop\\Stephanie\\Estudos\\C#\\api-cardapio-bolos\\cardapio-bolos\\CardapioBolos.csproj",
+      "projectUniqueName": "C:\\Users\\Stephanie Gomes\\Desktop\\Stephanie\\Estudos\\C#\\api-cardapio-bolos\\CardapioBolos\\CardapioBolos.csproj",
       "projectName": "CardapioBolos",
-      "projectPath": "C:\\Users\\Stephanie Gomes\\Desktop\\Stephanie\\Estudos\\C#\\api-cardapio-bolos\\cardapio-bolos\\CardapioBolos.csproj",
+      "projectPath": "C:\\Users\\Stephanie Gomes\\Desktop\\Stephanie\\Estudos\\C#\\api-cardapio-bolos\\CardapioBolos\\CardapioBolos.csproj",
       "packagesPath": "C:\\Users\\Stephanie Gomes\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Stephanie Gomes\\Desktop\\Stephanie\\Estudos\\C#\\api-cardapio-bolos\\cardapio-bolos\\obj\\",
+      "outputPath": "C:\\Users\\Stephanie Gomes\\Desktop\\Stephanie\\Estudos\\C#\\api-cardapio-bolos\\CardapioBolos\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

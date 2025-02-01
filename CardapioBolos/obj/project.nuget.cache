@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "hpt5Sq3gJcg=",
+  "dgSpecHash": "SU6eHwaUSBA=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Stephanie Gomes\\Desktop\\Stephanie\\Estudos\\C#\\api-cardapio-bolos\\cardapio-bolos\\CardapioBolos.csproj",
+  "projectFilePath": "C:\\Users\\Stephanie Gomes\\Desktop\\Stephanie\\Estudos\\C#\\api-cardapio-bolos\\CardapioBolos\\CardapioBolos.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Stephanie Gomes\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\Stephanie Gomes\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",

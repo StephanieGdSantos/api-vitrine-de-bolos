@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\cardapio-bolos\CardapioBolos.csproj" />
+    <ProjectReference Include="..\CardapioBolos\CardapioBolos.csproj" />
   </ItemGroup>
 
   <ItemGroup>
