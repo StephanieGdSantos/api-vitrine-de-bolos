@@ -41,6 +41,9 @@ namespace CardapioBolos.Test.Fixtures
             };
             Context.Bolos.AddRange(bolo1, bolo2);
 
+            var encomenda1 = new Encomenda(DateTime.Now, "Cliente Teste", "123456789", new List<Bolo> { bolo1, bolo2 }, 45.0, DateTime.Now.AddDays(1), "Cidade Teste", "Bairro Teste", "Logradouro Teste", "123", "Complemento Teste");
+            Context.Encomendas.AddRange(encomenda1);
+
             Context.SaveChanges();
         }
 
