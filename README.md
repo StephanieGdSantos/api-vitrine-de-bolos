@@ -25,7 +25,7 @@ A API CardapioBolos é projetada para gerenciar um catálogo de bolos, incluindo
 
 1. Clone o repositório:
     ```sh
-    git clone https://github.com/seuusuario/CardapioBolos.git
+    git clone https://github.com/StephanieGdSantos/api-vitrine-de-bolos.git
     cd CardapioBolos
     ```
 
