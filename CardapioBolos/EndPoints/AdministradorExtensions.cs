@@ -50,24 +50,24 @@ namespace CardapioBolos.EndPoints
             .WithTags("Administrador")
             .WithMetadata(new SwaggerOperationAttribute(summary: "Realiza login como administrador", description: "Realiza login no sistema como administrador."));
 
-            app.MapPatch("/admin/{id}", ([FromServices] DAL<Administrador> dal, [FromServices] CardapioBolosContext context, [FromBody] Administrador administrador) =>
+            app.MapPatch("/admin/{id}", async ([FromServices] DAL<Administrador> dal, [FromServices] CardapioBolosContext context, [FromBody] Administrador administrador) =>
             {
-                var admin = dal.BuscarPorId(administrador.Id);
+                var admin = await dal.BuscarPorId(administrador.Id);
                 if (admin == null)
                     return Results.NotFound();
 
                 var novoAdmin = new Administrador(administrador.Nome, administrador.Telefone, administrador.Email, administrador.Senha);
 
-                dal.Editar(novoAdmin);
+                await dal.Editar(novoAdmin);
                 return Results.Ok();
             })
             .WithTags("Administrador")
             .WithMetadata(new SwaggerOperationAttribute(summary: "Atualiza administrador", description: "Atualiza dados de um administrador já cadastrado."));
 
 
-            app.MapDelete("admin/{id}", ([FromServices] DAL<Administrador> dal, [FromServices] CardapioBolosContext context, int id) =>
+            app.MapDelete("admin/{id}", async ([FromServices] DAL<Administrador> dal, [FromServices] CardapioBolosContext context, int id) =>
             {
-                var admin = dal.BuscarPorId(id);
+                var admin = await dal.BuscarPorId(id);
                 if (admin == null)
                     return Results.NotFound();
 

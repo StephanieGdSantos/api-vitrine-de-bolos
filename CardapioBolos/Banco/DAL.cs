@@ -13,31 +13,31 @@ public class DAL<T> where T : class
         this.context = context;
     }
 
-    public virtual void Adicionar(T objeto)
+    public virtual async void Adicionar(T objeto)
     {
         context.Set<T>().Add(objeto);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
     }
 
-    public virtual T? Buscar(Func<T, bool> condicao)
+    public virtual async Task<T?> Buscar(Func<T, bool> condicao)
     {
-        return context.Set<T>().FirstOrDefault(condicao);
+        return await Task.Run(() => context.Set<T>().FirstOrDefault(condicao));
     }
 
-    public virtual T? BuscarPorId(int id)
+    public virtual async Task<T?> BuscarPorId(int id)
     {
-        return context.Set<T>().Find(id);
+        return await context.Set<T>().FindAsync(id);
     }
 
-    public virtual IEnumerable<T> Listar()
+    public virtual async Task<IEnumerable<T>> Listar()
     {
-        return context.Set<T>().ToList();
+        return await context.Set<T>().ToListAsync();
     }
 
-    public virtual void Excluir(T objeto)
+    public virtual async void Excluir(T objeto)
     {
         context.Set<T>().Remove(objeto);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
     }
 
     public virtual async Task Editar(T objeto)
