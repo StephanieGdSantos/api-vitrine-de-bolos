@@ -4,6 +4,7 @@ using CardapioBolos.Model;
 using CardapioBolos.Requests;
 using CardapioBolos.Services;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Security.Claims;
 
 namespace CardapioBolos.EndPoints
@@ -23,7 +24,9 @@ namespace CardapioBolos.EndPoints
                     return Results.NoContent();
 
                 return Results.Ok(encomendas.OrderBy(encomenda => encomenda.DataDaEntrega));
-            });
+            })
+            .WithTags("Encomendas")
+            .WithMetadata(new SwaggerOperationAttribute(summary: "Lista todas as encomendas", description: "Lista todas as encomendas cadastradas."));
 
             app.MapGet("/encomendas/{id}", ([FromServices] DAL<Encomenda> dal, [FromServices] CardapioBolosContext context, ClaimsPrincipal usuario, int id) =>
             {
@@ -36,7 +39,9 @@ namespace CardapioBolos.EndPoints
                     return Results.NoContent();
 
                 return Results.Ok(encomenda);
-            });
+            })
+            .WithTags("Encomendas")
+            .WithMetadata(new SwaggerOperationAttribute(summary: "Busca uma encomenda pelo id", description: "Busca uma encomenda pelo id."));
 
             app.MapPost("/encomendas", ([FromServices] DAL<Encomenda> dalEncomenda, [FromServices] DAL<Bolo> bolosDAL, [FromServices] CardapioBolosContext context, [FromBody] EncomendaRequest encomenda) =>
             {
@@ -54,7 +59,9 @@ namespace CardapioBolos.EndPoints
 
                 dalEncomenda.Adicionar(novaEncomenda);
                 return Results.Ok();
-            });
+            })
+            .WithTags("Encomendas")
+            .WithMetadata(new SwaggerOperationAttribute(summary: "Adiciona encomenda", description: "Adiciona uma nova encomenda."));
 
             app.MapPatch("/encomendas/{id}", ([FromServices] DAL<Encomenda> dal, [FromServices] CardapioBolosContext context, ClaimsPrincipal usuario, [FromBody] EncomendaRequestEdit encomenda, int id) =>
             {
@@ -83,7 +90,9 @@ namespace CardapioBolos.EndPoints
 
                 Task task = dal.Editar(novaEncomenda);
                 return Results.Ok();
-            });
+            })
+            .WithTags("Encomendas")
+            .WithMetadata(new SwaggerOperationAttribute(summary: "Atualiza encomenda", description: "Atualiza os dados de uma encomenda."));
 
             app.MapDelete("/encomendas/{id}", ([FromServices] DAL<Encomenda> dal, [FromServices] CardapioBolosContext context, ClaimsPrincipal usuario, int id) =>
             {
@@ -97,7 +106,9 @@ namespace CardapioBolos.EndPoints
 
                 dal.Excluir(encomendaExistente);
                 return Results.Ok();
-            });
+            })
+            .WithTags("Encomendas")
+            .WithMetadata(new SwaggerOperationAttribute(summary: "Exclui encomenda", description: "Exclui uma encomenda."));
         }
     }
 }

@@ -5,6 +5,7 @@ using CardapioBolos.Services;
 using CardapioBolos.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Runtime.CompilerServices;
 using System.Security.Claims;
 
@@ -26,7 +27,9 @@ namespace CardapioBolos.EndPoints
 
                 dal.Adicionar(novoAdministrador);
                 return Results.Ok();
-            });
+            })
+            .WithTags("Administrador")
+            .WithMetadata(new SwaggerOperationAttribute(summary: "Adiciona um administrador", description: "Adiciona um novo administrador ao sistema."));
 
             app.MapPost("/admin/login", ([FromServices] AdministradorServices administradorServices, [FromBody] AdministradorRequest administrador) =>
             {
@@ -43,7 +46,9 @@ namespace CardapioBolos.EndPoints
                 var usuario = new ClaimsPrincipal(identidade);
 
                 return Results.SignIn(usuario);
-            });
+            })
+            .WithTags("Administrador")
+            .WithMetadata(new SwaggerOperationAttribute(summary: "Realiza login como administrador", description: "Realiza login no sistema como administrador."));
 
             app.MapPatch("/admin/{id}", ([FromServices] DAL<Administrador> dal, [FromServices] CardapioBolosContext context, [FromBody] Administrador administrador) =>
             {
@@ -55,7 +60,10 @@ namespace CardapioBolos.EndPoints
 
                 dal.Editar(novoAdmin);
                 return Results.Ok();
-            });
+            })
+            .WithTags("Administrador")
+            .WithMetadata(new SwaggerOperationAttribute(summary: "Atualiza administrador", description: "Atualiza dados de um administrador já cadastrado."));
+
 
             app.MapDelete("admin/{id}", ([FromServices] DAL<Administrador> dal, [FromServices] CardapioBolosContext context, int id) =>
             {
@@ -65,7 +73,10 @@ namespace CardapioBolos.EndPoints
 
                 dal.Excluir(admin);
                 return Results.Ok();
-            });
+            })
+            .WithTags("Administrador")
+            .WithMetadata(new SwaggerOperationAttribute(summary: "Exclui um administrador", description: "Exclui a conta de um administrador."));
+
         }
     }
 }

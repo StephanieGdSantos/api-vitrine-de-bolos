@@ -5,6 +5,7 @@ using CardapioBolos.Requests;
 using CardapioBolos.Services;
 using CardapioBolos.Utils;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Linq;
 using System.Security.Claims;
 
@@ -22,7 +23,9 @@ public static class BolosExtensions
                 return Results.NoContent();
 
             return Results.Ok(bolos.OrderBy(bolo => bolo.Nome));
-        });
+        })
+        .WithTags("Bolos")
+        .WithMetadata(new SwaggerOperationAttribute(summary: "Lista todos os bolos", description: "Lista todos os bolos cadastrados."));
 
         app.MapGet("/bolos/{id}", async ([FromServices] DAL<Bolo> dal, int id) =>
         {
@@ -35,7 +38,9 @@ public static class BolosExtensions
                 return Results.NoContent();
 
             return Results.Ok(boloSelecionado);
-        });
+        })
+        .WithTags("Bolos")
+        .WithMetadata(new SwaggerOperationAttribute(summary: "Busca um bolo pelo id", description: "Busca um bolo cadastrado pelo id."));
 
         app.MapGet("/bolos/nome={nome}", ([FromServices] DAL<Bolo> dal, [FromServices] CardapioBolosContext context, string nome) =>
         {
@@ -53,7 +58,9 @@ public static class BolosExtensions
                 return Results.NoContent();
 
             return Results.Ok(bolos);
-        });
+        })
+        .WithTags("Bolos")
+        .WithMetadata(new SwaggerOperationAttribute(summary: "Busca um bolo pelo nome", description: "Busca um bolo cadastrado pelo nome."));
 
         app.MapPost("/bolos", ([FromServices] DAL<Bolo> boloDal, [FromServices] DAL<Ingrediente> ingredienteDal, [FromServices] CardapioBolosContext context, ClaimsPrincipal usuario, [FromBody] BoloRequest bolo) =>
         {
@@ -74,7 +81,9 @@ public static class BolosExtensions
             var novoBolo = new Bolo(bolo.Nome, bolo.Imagem, bolo.Descricao, ingredientesDoBolo, bolo.Preco);
             boloDal.Adicionar(novoBolo);
             return Results.Ok();
-        });
+        })
+        .WithTags("Bolos")
+        .WithMetadata(new SwaggerOperationAttribute(summary: "Adiciona um bolo", description: "Adiciona um novo bolo no banco de dados."));
 
         app.MapPatch("/bolos/{id}", async ([FromServices] DAL<Bolo> dal, [FromServices] DAL<Ingrediente> ingredientesDAL, [FromServices] CardapioBolosContext context, ClaimsPrincipal usuario,  [FromBody] BoloRequestEdit bolo, int id) =>
         {
@@ -106,7 +115,9 @@ public static class BolosExtensions
             };
             await dal.Editar(boloAtualizado);
             return Results.Ok();
-        });
+        })
+        .WithTags("Bolos")
+        .WithMetadata(new SwaggerOperationAttribute(summary: "Atualiza um bolo", description: "Atualiza os dados de um bolo."));
 
         app.MapDelete("/bolos/{id}", ([FromServices] DAL<Bolo> dal, [FromServices] CardapioBolosContext context, ClaimsPrincipal usuario, int id) =>
         {
@@ -120,7 +131,9 @@ public static class BolosExtensions
 
             dal.Excluir(boloAExcluir);
             return Results.NoContent();
-        });
+        })
+        .WithTags("Bolos")
+        .WithMetadata(new SwaggerOperationAttribute(summary: "Exclui bolo", description: "Exclui um bolo."));
     }
 
     

@@ -3,6 +3,7 @@ using CardapioBolos.DTO;
 using CardapioBolos.Model;
 using CardapioBolos.Services;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Security.Claims;
 
 namespace CardapioBolos.EndPoints
@@ -22,7 +23,9 @@ namespace CardapioBolos.EndPoints
                     return Results.NoContent();
 
                 return Results.Ok(ingredientes);
-            });
+            })
+            .WithTags("Ingredientes")
+            .WithMetadata(new SwaggerOperationAttribute(summary: "Lista ingredientes", description: "Lista todos os ingredientes cadastrados."));
 
             app.MapGet("/ingredientes/{id}", async ([FromServices] DAL<Ingrediente> dal, ClaimsPrincipal usuario, [FromServices] CardapioBolosContext context, int id) =>
             {
@@ -39,7 +42,9 @@ namespace CardapioBolos.EndPoints
                     return Results.NoContent();
 
                 return Results.Ok(ingrediente);
-            });
+            })
+            .WithTags("Ingredientes")
+            .WithMetadata(new SwaggerOperationAttribute(summary: "Busca ingrediente pelo id", description: "Busca um ingrediente pelo id."));
 
             app.MapPost("/ingredientes", ([FromServices] DAL<Ingrediente> dal, ClaimsPrincipal usuario, [FromServices] CardapioBolosContext context, [FromBody] List<string> listaIngredientes) =>
             {
@@ -61,7 +66,9 @@ namespace CardapioBolos.EndPoints
                     dal.Adicionar(ingrediente);
 
                 return Results.Ok();
-            });
+            })
+            .WithTags("Ingredientes")
+            .WithMetadata(new SwaggerOperationAttribute(summary: "Adiciona ingredientes", description: "Adiciona novos ingredientes ao banco de dados."));
 
             app.MapPatch("/ingredientes/{id}", async ([FromServices] DAL<Ingrediente> dal, ClaimsPrincipal usuario, [FromServices] CardapioBolosContext context, [FromBody] string nomeIngrediente, int id) =>
             {
@@ -77,7 +84,9 @@ namespace CardapioBolos.EndPoints
 
                 await dal.Editar(ingredienteExistente);
                 return Results.Ok();
-            });
+            })
+            .WithTags("Ingredientes")
+            .WithMetadata(new SwaggerOperationAttribute(summary: "Atualiza um ingrediente", description: "Atualiza o nome de um ingrediente"));
 
             app.MapDelete("/ingredientes/{id}", ([FromServices] DAL<Ingrediente> dal, ClaimsPrincipal usuario, [FromServices] CardapioBolosContext context, int id) =>
             {
@@ -91,7 +100,9 @@ namespace CardapioBolos.EndPoints
 
                 dal.Excluir(ingrediente);
                 return Results.Ok();
-            });
+            })
+            .WithTags("Ingredientes")
+            .WithMetadata(new SwaggerOperationAttribute(summary: "Exclui ingrediente", description: "Exclui um ingrediente."));
         }
     }
 }
