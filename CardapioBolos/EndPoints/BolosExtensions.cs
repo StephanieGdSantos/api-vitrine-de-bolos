@@ -15,9 +15,9 @@ public static class BolosExtensions
 {
     public static void AddEndpointsBolos(this WebApplication app)
     {
-        app.MapGet("/bolos", ([FromServices] DAL<Bolo> dal) =>
+        app.MapGet("/bolos", async ([FromServices] DAL<Bolo> dal) =>
         {
-            var bolos = dal.Listar();
+            var bolos = await dal.Listar();
 
             if (!bolos.Any())
                 return Results.NoContent();
@@ -29,10 +29,11 @@ public static class BolosExtensions
 
         app.MapGet("/bolos/{id}", async ([FromServices] DAL<Bolo> dal, int id) =>
         {
-            var boloSelecionado = await Task.Run(() => dal.Listar()
+            var bolos = await dal.Listar();
+            var boloSelecionado = bolos
                 .Where(b => b.Id == id)
-                .Select(b => new BoloDTO() {Id = id, Nome = b.Nome, Descricao = b.Descricao, Imagem = b.Imagem, Peso = b.Peso, Preco = b.Preco, Ingredientes = b.Ingredientes })
-                .FirstOrDefault());
+                .Select(b => new BoloDTO() { Id = id, Nome = b.Nome, Descricao = b.Descricao, Imagem = b.Imagem, Peso = b.Peso, Preco = b.Preco, Ingredientes = b.Ingredientes })
+                .FirstOrDefault();
 
             if (boloSelecionado == null)
                 return Results.NoContent();
@@ -42,27 +43,31 @@ public static class BolosExtensions
         .WithTags("Bolos")
         .WithMetadata(new SwaggerOperationAttribute(summary: "Busca um bolo pelo id", description: "Busca um bolo cadastrado pelo id."));
 
-        app.MapGet("/bolos/nome={nome}", ([FromServices] DAL<Bolo> dal, [FromServices] CardapioBolosContext context, string nome) =>
+        app.MapGet("/bolos/nome={nome}", async ([FromServices] DAL<Bolo> dal, [FromServices] CardapioBolosContext context, string nome) =>
         {
             var nomeProcurado = new BoloServices(context).FormatarNomeParaBusca(nome);
-            var bolosExistentes = dal.Listar().Select(bolo => bolo.Nome).ToArray();
-            var bolosEncontrados = Buscador.BuscarNomesSemelhantes(bolosExistentes, nomeProcurado);
+            var bolosExistentes = await dal.Listar();
+            var nomeBolosExistentes = bolosExistentes
+                .Select(bolo => bolo.Nome).ToArray();
 
-            var bolos = dal.Listar()
+            var bolosEncontrados = Buscador.BuscarNomesSemelhantes(nomeBolosExistentes, nomeProcurado);
+
+            var bolos = await dal.Listar();
+            var bolosSelecionados = bolos
                 .Where(bolo => bolosEncontrados
                     .Contains(bolo.Nome
                     .ToLower()))
                 .Select(b => new BoloDTO() { Id = b.Id, Nome = b.Nome, Descricao = b.Descricao, Imagem = b.Imagem, Peso = b.Peso, Preco = b.Preco, Ingredientes = b.Ingredientes });
 
-            if (!bolos.Any())
+            if (!bolosSelecionados.Any())
                 return Results.NoContent();
 
-            return Results.Ok(bolos);
+            return Results.Ok(bolosSelecionados);
         })
         .WithTags("Bolos")
         .WithMetadata(new SwaggerOperationAttribute(summary: "Busca um bolo pelo nome", description: "Busca um bolo cadastrado pelo nome."));
 
-        app.MapPost("/bolos", ([FromServices] DAL<Bolo> boloDal, [FromServices] DAL<Ingrediente> ingredienteDal, [FromServices] CardapioBolosContext context, ClaimsPrincipal usuario, [FromBody] BoloRequest bolo) =>
+        app.MapPost("/bolos", async ([FromServices] DAL<Bolo> boloDal, [FromServices] DAL<Ingrediente> ingredienteDal, [FromServices] CardapioBolosContext context, ClaimsPrincipal usuario, [FromBody] BoloRequest bolo) =>
         {
             var usuarioEhAdmin = new AdministradorServices(context).ValidaSeEhAdministrador(usuario);
             if (!usuarioEhAdmin)
@@ -70,15 +75,16 @@ public static class BolosExtensions
 
             var nomesIngredientesInseridos = bolo.Ingredientes.Select(ingrediente => ingrediente.Nome).ToList();
 
-            var ingredientesDoBolo = ingredienteDal.Listar()
+            var ingredientesDoBolo = await ingredienteDal.Listar();
+            var ingredientesInseridos = ingredientesDoBolo
                 .Where(ingrediente => nomesIngredientesInseridos.Contains(ingrediente.Nome))
                 .ToList();
             
-            var erroNosIngredientes = new BoloServices(context).VerificarIngredientesNaoEncontrados(nomesIngredientesInseridos, ingredientesDoBolo);
+            var erroNosIngredientes = new BoloServices(context).VerificarIngredientesNaoEncontrados(nomesIngredientesInseridos, ingredientesInseridos);
             if (erroNosIngredientes != "")
                 return Results.Problem(erroNosIngredientes);
 
-            var novoBolo = new Bolo(bolo.Nome, bolo.Imagem, bolo.Descricao, ingredientesDoBolo, bolo.Preco);
+            var novoBolo = new Bolo(bolo.Nome, bolo.Imagem, bolo.Descricao, ingredientesInseridos, bolo.Preco);
             boloDal.Adicionar(novoBolo);
             return Results.Ok();
         })
@@ -100,16 +106,17 @@ public static class BolosExtensions
                 .Select(ingrediente => ingrediente.Nome)
                 .ToList();
 
-            var ingredientesDoBolo = ingredientesDAL.Listar()
+            var ingredientesDoBolo = await ingredientesDAL.Listar();
+            var ingredientesAtualizados = ingredientesDoBolo
                 .Where(ingrediente => nomeIngredientesInseridos
                 .Contains(ingrediente.Nome))
                 .ToList();
 
-            var erroNosIngredientes = new BoloServices(context).VerificarIngredientesNaoEncontrados(nomeIngredientesInseridos, ingredientesDoBolo);
+            var erroNosIngredientes = new BoloServices(context).VerificarIngredientesNaoEncontrados(nomeIngredientesInseridos, ingredientesAtualizados);
             if (erroNosIngredientes != "")
                 return Results.Problem(erroNosIngredientes);
 
-            var boloAtualizado = new Bolo(bolo.Nome, bolo.Imagem, bolo.Descricao, ingredientesDoBolo, bolo.Preco, 1)
+            var boloAtualizado = new Bolo(bolo.Nome, bolo.Imagem, bolo.Descricao, ingredientesAtualizados, bolo.Preco, 1)
             {
                 Id = id,
             };
@@ -119,13 +126,13 @@ public static class BolosExtensions
         .WithTags("Bolos")
         .WithMetadata(new SwaggerOperationAttribute(summary: "Atualiza um bolo", description: "Atualiza os dados de um bolo."));
 
-        app.MapDelete("/bolos/{id}", ([FromServices] DAL<Bolo> dal, [FromServices] CardapioBolosContext context, ClaimsPrincipal usuario, int id) =>
+        app.MapDelete("/bolos/{id}", async ([FromServices] DAL<Bolo> dal, [FromServices] CardapioBolosContext context, ClaimsPrincipal usuario, int id) =>
         {
             var usuarioEhAdmin = new AdministradorServices(context).ValidaSeEhAdministrador(usuario);
             if (!usuarioEhAdmin)
                 return Results.Unauthorized();
 
-            var boloAExcluir = dal.BuscarPorId(id);
+            var boloAExcluir = await dal.BuscarPorId(id);
             if (boloAExcluir == null)
                 return Results.NotFound();
 
