@@ -12,13 +12,13 @@ namespace CardapioBolos.EndPoints
     {
         public static void AddEndpointsIngredientes(this WebApplication app)
         {
-            app.MapGet("/ingredientes", ([FromServices] DAL<Ingrediente> dal, ClaimsPrincipal usuario, [FromServices] CardapioBolosContext context) =>
+            app.MapGet("/ingredientes", async ([FromServices] DAL<Ingrediente> dal, ClaimsPrincipal usuario, [FromServices] CardapioBolosContext context) =>
             {
                 var usuarioEhAdmin = new AdministradorServices(context).ValidaSeEhAdministrador(usuario);
                 if (!usuarioEhAdmin)
                     return Results.Unauthorized();
 
-                var ingredientes = dal.Listar();
+                var ingredientes = await dal.Listar();
                 if (!ingredientes.Any())
                     return Results.NoContent();
 
@@ -33,10 +33,11 @@ namespace CardapioBolos.EndPoints
                 if (!usuarioEhAdmin)
                     return Results.Unauthorized();
 
-                var ingrediente = await Task.Run(() => dal.Listar()
+                var ingredientesJaCadastrados = await dal.Listar();
+                var ingrediente = ingredientesJaCadastrados
                     .Where(i => i.Id == id)
                     .Select(i => new IngredienteDTO { Nome = i.Nome })
-                    .FirstOrDefault());
+                    .FirstOrDefault();
 
                 if (ingrediente == null)
                     return Results.NoContent();
@@ -76,7 +77,7 @@ namespace CardapioBolos.EndPoints
                 if (!usuarioEhAdmin)
                     return Results.Unauthorized();
 
-                var ingredienteExistente = dal.BuscarPorId(id);
+                var ingredienteExistente = await dal.BuscarPorId(id);
                 if (ingredienteExistente == null)
                     return Results.NotFound();
 
@@ -88,13 +89,13 @@ namespace CardapioBolos.EndPoints
             .WithTags("Ingredientes")
             .WithMetadata(new SwaggerOperationAttribute(summary: "Atualiza um ingrediente", description: "Atualiza o nome de um ingrediente"));
 
-            app.MapDelete("/ingredientes/{id}", ([FromServices] DAL<Ingrediente> dal, ClaimsPrincipal usuario, [FromServices] CardapioBolosContext context, int id) =>
+            app.MapDelete("/ingredientes/{id}", async ([FromServices] DAL<Ingrediente> dal, ClaimsPrincipal usuario, [FromServices] CardapioBolosContext context, int id) =>
             {
                 var usuarioEhAdmin = new AdministradorServices(context).ValidaSeEhAdministrador(usuario);
                 if (!usuarioEhAdmin)
                     return Results.Unauthorized();
 
-                var ingrediente = dal.BuscarPorId(id);
+                var ingrediente = await dal.BuscarPorId(id);
                 if (ingrediente == null)
                     return Results.NotFound();
 
