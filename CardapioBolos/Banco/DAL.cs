@@ -13,7 +13,7 @@ public class DAL<T> where T : class
         this.context = context;
     }
 
-    public virtual async void Adicionar(T objeto)
+    public virtual async Task Adicionar(T objeto)
     {
         context.Set<T>().Add(objeto);
         await context.SaveChangesAsync();
