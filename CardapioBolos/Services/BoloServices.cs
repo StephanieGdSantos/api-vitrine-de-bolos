@@ -15,9 +15,9 @@ namespace CardapioBolos.Services
             _context = context;
         }
 
-        public List<Bolo>? ObterListaDeBolosInseridos(EncomendaRequest encomenda)
+        public async Task<List<Bolo>?> ObterListaDeBolosInseridosAsync(EncomendaRequest encomenda)
         {
-            var bolos = VerificarBolosExistentes(encomenda.Bolos);
+            var bolos = await VerificarBolosExistentes(encomenda.Bolos);
 
             if (bolos == null)
                 return null;
@@ -36,7 +36,7 @@ namespace CardapioBolos.Services
             return bolos;
         }
 
-        public List<Bolo>? VerificarBolosExistentes(List<Bolo> bolos)
+        public async Task<List<Bolo>>? VerificarBolosExistentes(List<Bolo> bolos)
         {
             if (bolos.Count == 0)
                 return null;
@@ -47,6 +47,7 @@ namespace CardapioBolos.Services
 
             var bolosEncontrados = _bolosDAL
                 .Listar()
+                .Result
                 .Where(b => bolosId
                     .Contains(b.Id))
                 .OrderBy(b => bolosId.IndexOf(b.Id))
@@ -58,7 +59,7 @@ namespace CardapioBolos.Services
                 .Select(bolo => new Bolo { Nome = bolo.Nome })
                 .ToList();
 
-            return bolosEncontrados;
+            return (List<Bolo>)bolosEncontrados;
         }
 
         public string FormatarNomeParaBusca(string nome)

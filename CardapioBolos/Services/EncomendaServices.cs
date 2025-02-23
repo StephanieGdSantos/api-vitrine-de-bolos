@@ -17,7 +17,7 @@ namespace CardapioBolos.Services
 
         public Encomenda? ObterEncomenda(EncomendaRequest encomenda)
         {
-            var listaDeBolos = new BoloServices(_context).ObterListaDeBolosInseridos(encomenda);
+            var listaDeBolos = new BoloServices(_context).ObterListaDeBolosInseridosAsync(encomenda).Result;
              
             if (listaDeBolos == null)
                 return null;

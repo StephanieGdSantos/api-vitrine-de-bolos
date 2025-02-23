@@ -21,7 +21,7 @@ namespace CardapioBolos.Services
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(senha))
                 return false;
 
-            var administrador = _administradorDAL.Buscar(admin => admin.Email.Equals(email));
+            var administrador = _administradorDAL.Buscar(admin => admin.Email.Equals(email)).Result;
             if (administrador == null)
                 return false;
 
@@ -30,7 +30,7 @@ namespace CardapioBolos.Services
 
         public bool VerificarSeEmailJaEhUsado(string email)
         {
-            var administrador = _administradorDAL.Buscar(admin => admin.Email.Equals(email));
+            var administrador = _administradorDAL.Buscar(admin => admin.Email.Equals(email)).Result;
 
             if (administrador == null)
                 return false;
