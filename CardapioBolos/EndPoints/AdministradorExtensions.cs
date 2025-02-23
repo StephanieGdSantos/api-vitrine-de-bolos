@@ -3,6 +3,8 @@ using CardapioBolos.Model;
 using CardapioBolos.Requests;
 using CardapioBolos.Services;
 using CardapioBolos.Utils;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -39,10 +41,11 @@ namespace CardapioBolos.EndPoints
 
                 var claims = new List<Claim>
                 {
-                        new(ClaimTypes.Email, administrador.Email),
-                        new(ClaimTypes.Role, "admin")
+                    new(ClaimTypes.Email, administrador.Email),
+                    new(ClaimTypes.Role, "admin")
                 };
-                var identidade = new ClaimsIdentity(claims, "login");
+
+                var identidade = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var usuario = new ClaimsPrincipal(identidade);
 
                 var authProperties = new AuthenticationProperties
