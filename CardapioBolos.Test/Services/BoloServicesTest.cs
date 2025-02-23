@@ -56,7 +56,7 @@ namespace CardapioBolos.Test.Services
         [MemberData(nameof(GetEncomendaRequests))]
         public void ObterListaDeBolosInseridos_DeveRetornarListaDeBolosEsperada(EncomendaRequest encomendaRequest, List<Bolo> bolosEsperados)
         {
-            var resultado = _boloServices.ObterListaDeBolosInseridos(encomendaRequest);
+            var resultado = _boloServices.ObterListaDeBolosInseridosAsync(encomendaRequest).Result;
 
             if (bolosEsperados == null)
             {
@@ -89,7 +89,7 @@ namespace CardapioBolos.Test.Services
         {
             var bolos = bolosData.Select(b => new Bolo { Id = (int)((object[])b)[0], Nome = (string)((object[])b)[1] }).ToList();
 
-            var resultado = _boloServices.VerificarBolosExistentes(bolos);
+            var resultado = _boloServices.VerificarBolosExistentes(bolos).Result;
 
             if (quantidadeEsperada == 0)
             {
