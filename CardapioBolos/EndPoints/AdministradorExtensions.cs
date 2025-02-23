@@ -15,7 +15,7 @@ namespace CardapioBolos.EndPoints
     {
         public static void AddEndPointsAdministrador(this WebApplication app)
         {
-            app.MapPost("/admin", ([FromServices] DAL<Administrador> dal, [FromServices] AdministradorServices administradorServices, [FromBody] Administrador administrador, [FromServices] CardapioBolosContext context) =>
+            app.MapPost("/admin", async ([FromServices] DAL<Administrador> dal, [FromServices] AdministradorServices administradorServices, [FromBody] Administrador administrador, [FromServices] CardapioBolosContext context) =>
             {
                 administrador.Telefone = administradorServices.FormatarTelefone(administrador.Telefone);
                 var validezDoUsuario = administradorServices.ValidarDadosDoAdministrador(administrador);
@@ -25,13 +25,13 @@ namespace CardapioBolos.EndPoints
                 var hashSenha = VerificadorDeSenha.GerarHashSenha(administrador.Senha);
                 var novoAdministrador = new Administrador(administrador.Nome, administrador.Telefone, administrador.Email, hashSenha);
 
-                dal.Adicionar(novoAdministrador);
+                await dal.Adicionar(novoAdministrador);
                 return Results.Ok();
             })
             .WithTags("Administrador")
             .WithMetadata(new SwaggerOperationAttribute(summary: "Adiciona um administrador", description: "Adiciona um novo administrador ao sistema."));
 
-            app.MapPost("/admin/login", ([FromServices] AdministradorServices administradorServices, [FromBody] AdministradorRequest administrador) =>
+            app.MapPost("/admin/login", async ([FromServices] AdministradorServices administradorServices, [FromBody] AdministradorRequest administrador, HttpContext httpContext) =>
             {
                 var senhaValida = administradorServices.Autenticar(administrador.Email, administrador.Senha);
                 if (!senhaValida)
