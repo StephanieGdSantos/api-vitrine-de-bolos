@@ -23,7 +23,7 @@ namespace CardapioBolos.EndPoints
                 if (!encomendas.Any())
                     return Results.NoContent();
 
-                return Results.Ok(encomendas.OrderBy(encomenda => encomenda.DataDaEntrega));
+                return Results.Ok(encomendas.OrderBy(encomenda => encomenda.Id));
             })
             .WithTags("Encomendas")
             .WithMetadata(new SwaggerOperationAttribute(summary: "Lista todas as encomendas", description: "Lista todas as encomendas cadastradas."));
