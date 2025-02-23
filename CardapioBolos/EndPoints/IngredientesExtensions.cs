@@ -47,7 +47,7 @@ namespace CardapioBolos.EndPoints
             .WithTags("Ingredientes")
             .WithMetadata(new SwaggerOperationAttribute(summary: "Busca ingrediente pelo id", description: "Busca um ingrediente pelo id."));
 
-            app.MapPost("/ingredientes", ([FromServices] DAL<Ingrediente> dal, ClaimsPrincipal usuario, [FromServices] CardapioBolosContext context, [FromBody] List<string> listaIngredientes) =>
+            app.MapPost("/ingredientes", async ([FromServices] DAL<Ingrediente> dal, ClaimsPrincipal usuario, [FromServices] CardapioBolosContext context, [FromBody] List<string> listaIngredientes) =>
             {
                 var usuarioEhAdmin = new AdministradorServices(context).ValidaSeEhAdministrador(usuario);
                 if (!usuarioEhAdmin)
@@ -55,7 +55,7 @@ namespace CardapioBolos.EndPoints
 
                 foreach (var ingrediente in listaIngredientes)
                 {
-                    if (dal.Buscar(ingr => ingr.Nome.ToLower().Equals(ingrediente.ToLower())) != null)
+                    if (dal.Buscar(ingr => ingr.Nome.ToLower().Equals(ingrediente.ToLower())).Result != null)
                         return Results.Problem("O ingrediente já está cadastrado.");
                 }
 
@@ -64,7 +64,7 @@ namespace CardapioBolos.EndPoints
                     listaNovosIngredientes.Add(new Ingrediente(ingrediente));
 
                 foreach (var ingrediente in listaNovosIngredientes)
-                    dal.Adicionar(ingrediente);
+                    await dal.Adicionar(ingrediente);
 
                 return Results.Ok();
             })
