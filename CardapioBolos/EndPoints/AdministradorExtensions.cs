@@ -45,7 +45,21 @@ namespace CardapioBolos.EndPoints
                 var identidade = new ClaimsIdentity(claims, "login");
                 var usuario = new ClaimsPrincipal(identidade);
 
-                return Results.SignIn(usuario);
+                var authProperties = new AuthenticationProperties
+                {
+                    IsPersistent = true,
+                    ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30)
+                };
+
+                await httpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, usuario, authProperties);
+
+                var response = new
+                {
+                    email = administrador.Email,
+                    role = usuario.Claims.First(c => c.Type == ClaimTypes.Role).Value
+                };
+
+                return Results.Json(response);
             })
             .WithTags("Administrador")
             .WithMetadata(new SwaggerOperationAttribute(summary: "Realiza login como administrador", description: "Realiza login no sistema como administrador."));
